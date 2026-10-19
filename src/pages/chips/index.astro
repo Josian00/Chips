@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+
+const chips = (await getCollection('chips')).sort(
+  (a, b) => b.data.rating - a.data.rating || a.data.name.localeCompare(b.data.name),
+);
+---
+
+<Base title="All chips" description="Every chip in the database, sorted by rating.">
+  <h1>All chips</h1>
+  <p class="muted">{chips.length} chips, best rated first.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Chip</th>
+          <th>Brand</th>
+          <th>Flavour</th>
+          <th>Country</th>
+          <th class="num">Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          chips.map((chip) => (
+            <tr>
+              <td>
+                <a href={url(`chips/${chip.id}/`)}>{chip.data.name}</a>
+              </td>
+              <td>{chip.data.brand}</td>
+              <td>{chip.data.flavour}</td>
+              <td>{chip.data.country}</td>
+              <td class="num">{chip.data.rating}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</Base>
+
+<style>
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 0.875rem; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+</style>
