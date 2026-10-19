@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
+
+interface Props {
+  chip: CollectionEntry<'chips'>;
+}
+
+const { chip } = Astro.props;
+const { name, brand, flavour, country, rating } = chip.data;
+---
+
+<a class="card" href={url(`chips/${chip.id}/`)}>
+  <span class="rating">{rating}/10</span>
+  <h3>{brand} {name}</h3>
+  <p class="muted">{flavour} · {country}</p>
+</a>
+
+<style>
+  .card {
+    display: block;
+    position: relative;
+    padding: 1rem 1.25rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    color: inherit;
+  }
+  .card:hover { border-color: var(--accent); text-decoration: none; }
+  h3 { margin: 0 3.5rem 0.25rem 0; }
+  p { margin: 0; }
+  .rating {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import { url } from '../lib/url';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Reviews and ratings of chips and crisps from around the world.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <title>{title === 'Chips' ? title : `${title} · Chips`}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a class="brand" href={url()}>🥔 Chips</a>
+        <a href={url('chips/')}>All chips</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>A blog and database of chips and crisps.</p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #fffaf0;
+    --fg: #2b2118;
+    --muted: #7a6a58;
+    --accent: #d98e04;
+    --card: #ffffff;
+    --border: #eadfcc;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1712;
+      --fg: #f3ebdf;
+      --muted: #b3a48f;
+      --accent: #f2b53a;
+      --card: #26201a;
+      --border: #3a3128;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+  }
+  header, main, footer { max-width: 56rem; margin: 0 auto; padding: 1rem; }
+  nav { display: flex; gap: 1.5rem; align-items: baseline; }
+  nav .brand { font-weight: 700; font-size: 1.25rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  footer { color: var(--muted); font-size: 0.875rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+  .muted { color: var(--muted); }
+</style>
