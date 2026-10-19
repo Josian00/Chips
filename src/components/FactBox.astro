@@ -1,0 +1,34 @@
+---
+import type { Chip } from '../lib/chips';
+import Rating from './Rating.astro';
+
+interface Props {
+  chip: Chip;
+}
+
+const { brand, name, flavour, country, rating } = Astro.props.chip.data;
+---
+
+<aside class="facts">
+  <h2>The facts</h2>
+  <dl>
+    <dt>Chip</dt><dd>{name}</dd>
+    <dt>Brand</dt><dd>{brand}</dd>
+    <dt>Flavour</dt><dd>{flavour}</dd>
+    <dt>Country</dt><dd>{country}</dd>
+    <dt>Verdict</dt><dd><Rating rating={rating} /></dd>
+  </dl>
+</aside>
+
+<style>
+  .facts {
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+  h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1.25rem; margin: 0; }
+  dt { color: var(--muted); }
+  dd { margin: 0; }
+</style>

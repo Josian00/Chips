@@ -1,4 +1,5 @@
 ---
+title: "The honey butter chip that broke my brain (in a good way)"
 name: Shiawase Butter
 brand: Calbee
 flavour: Honey Butter

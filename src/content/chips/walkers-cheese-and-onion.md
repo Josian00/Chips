@@ -1,10 +1,11 @@
 ---
+title: "Walkers Cheese & Onion: the blue bag, revisited"
 name: Cheese & Onion
 brand: Walkers
 flavour: Cheese & Onion
 country: United Kingdom
 rating: 8
-reviewed: 2026-10-19
+reviewed: 2026-10-12
 ---
 
 A British classic in the blue bag. Thin, crisp slices with a sharp, tangy

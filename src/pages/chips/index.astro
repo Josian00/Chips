@@ -1,24 +1,27 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Rating from '../../components/Rating.astro';
+import { formatDate, getChipsByDate } from '../../lib/chips';
 import { url } from '../../lib/url';
 
-const chips = (await getCollection('chips')).sort(
+const chips = (await getChipsByDate()).sort(
   (a, b) => b.data.rating - a.data.rating || a.data.name.localeCompare(b.data.name),
 );
 ---
 
-<Base title="All chips" description="Every chip in the database, sorted by rating.">
-  <h1>All chips</h1>
-  <p class="muted">{chips.length} chips, best rated first.</p>
+<Base title="All reviews" description="Every chip we've tasted, best rated first.">
+  <header>
+    <h1>All reviews</h1>
+    <p class="muted">Every chip we've tasted so far, {chips.length} in total, best rated first.</p>
+  </header>
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th>Chip</th>
-          <th>Brand</th>
           <th>Flavour</th>
           <th>Country</th>
+          <th>Reviewed</th>
           <th class="num">Rating</th>
         </tr>
       </thead>
@@ -27,12 +30,16 @@ const chips = (await getCollection('chips')).sort(
           chips.map((chip) => (
             <tr>
               <td>
-                <a href={url(`chips/${chip.id}/`)}>{chip.data.name}</a>
+                <a href={url(`chips/${chip.id}/`)}>
+                  {chip.data.brand} {chip.data.name}
+                </a>
               </td>
-              <td>{chip.data.brand}</td>
               <td>{chip.data.flavour}</td>
               <td>{chip.data.country}</td>
-              <td class="num">{chip.data.rating}</td>
+              <td class="muted">{formatDate(chip.data.reviewed)}</td>
+              <td class="num">
+                <Rating rating={chip.data.rating} />
+              </td>
             </tr>
           ))
         }
@@ -42,9 +49,24 @@ const chips = (await getCollection('chips')).sort(
 </Base>
 
 <style>
-  .table-wrap { overflow-x: auto; }
+  header { text-align: center; margin-bottom: 2rem; }
+  h1 { margin: 0 0 0.5rem; font-size: clamp(2rem, 5vw, 3rem); }
+  .table-wrap {
+    overflow-x: auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
   table { width: 100%; border-collapse: collapse; }
-  th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
-  th { color: var(--muted); font-weight: 600; font-size: 0.875rem; }
-  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  th {
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  td a { font-weight: 700; text-decoration: none; }
+  td a:hover { text-decoration: underline; }
+  .num { text-align: right; }
 </style>
