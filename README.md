@@ -1,6 +1,6 @@
 # Chips
 
-A blog-style database of chips and crisps, with a rating and review for each one. Built with [Astro](https://astro.build) as a static site and deployed to GitHub Pages.
+A food blog about chips and crisps, with a rating and review for each one. Built with [Astro](https://astro.build) as a static site and deployed to GitHub Pages.
 
 ## Run it locally
 
@@ -19,6 +19,9 @@ Create a Markdown file in `src/content/chips/`. The file name becomes the URL sl
 
 ```md
 ---
+title: "Pringles Original: stacked and salty"   # optional headline
+excerpt: A short teaser for cards.              # optional, defaults to the first paragraph
+image: images/pringles-original.jpg             # optional photo in public/
 name: Original
 brand: Pringles
 flavour: Salted
@@ -30,6 +33,8 @@ reviewed: 2026-10-19
 Your review goes here, in Markdown.
 ```
 
+The newest review (by `reviewed` date) is featured in full on the home page, with the others suggested below it. Without an `image`, a coloured placeholder is drawn.
+
 The fields are checked by the schema in `src/content.config.ts`, so a missing or mistyped field fails the build with a clear error.
 
 ## Project layout
@@ -38,9 +43,11 @@ The fields are checked by the schema in `src/content.config.ts`, so a missing or
 | --- | --- |
 | `src/content/chips/` | One Markdown file per chip |
 | `src/content.config.ts` | Schema for chip entries |
-| `src/pages/index.astro` | Home page (top rated and latest) |
+| `src/pages/index.astro` | Home page (newest post in full, then suggestions) |
 | `src/pages/chips/index.astro` | Table of all chips |
-| `src/pages/chips/[id].astro` | Detail page for one chip |
+| `src/pages/chips/[id].astro` | Blog post for one chip, with "You might also like" |
+| `src/components/` | Post, card, photo, fact box and rating pieces |
+| `src/lib/chips.ts` | Sorting, excerpts and suggestion logic |
 | `src/layouts/Base.astro` | Shared layout and styles |
 
 ## Deploy

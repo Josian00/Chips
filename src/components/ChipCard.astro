@@ -1,39 +1,48 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { Chip } from '../lib/chips';
+import { excerpt, formatDate, postTitle } from '../lib/chips';
 import { url } from '../lib/url';
+import ChipPhoto from './ChipPhoto.astro';
+import Rating from './Rating.astro';
 
 interface Props {
-  chip: CollectionEntry<'chips'>;
+  chip: Chip;
 }
 
 const { chip } = Astro.props;
-const { name, brand, flavour, country, rating } = chip.data;
+const { country, rating, reviewed } = chip.data;
 ---
 
-<a class="card" href={url(`chips/${chip.id}/`)}>
-  <span class="rating">{rating}/10</span>
-  <h3>{brand} {name}</h3>
-  <p class="muted">{flavour} · {country}</p>
-</a>
+<article class="card">
+  <a href={url(`chips/${chip.id}/`)}>
+    <ChipPhoto chip={chip} />
+    <div class="body">
+      <p class="meta">
+        <span>{country}</span>
+        <Rating rating={rating} />
+      </p>
+      <h3>{postTitle(chip)}</h3>
+      <p class="excerpt">{excerpt(chip)}</p>
+      <time datetime={reviewed.toISOString()}>{formatDate(reviewed)}</time>
+    </div>
+  </a>
+</article>
 
 <style>
-  .card {
-    display: block;
-    position: relative;
-    padding: 1rem 1.25rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    color: inherit;
+  .card a { display: block; color: inherit; text-decoration: none; }
+  .card a:hover h3 { color: var(--accent-text); }
+  .body { padding: 0.9rem 0.1rem 0; }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 0.4rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
-  .card:hover { border-color: var(--accent); text-decoration: none; }
-  h3 { margin: 0 3.5rem 0.25rem 0; }
-  p { margin: 0; }
-  .rating {
-    position: absolute;
-    top: 1rem;
-    right: 1.25rem;
-    font-weight: 700;
-    color: var(--accent);
-  }
+  h3 { margin: 0 0 0.4rem; font-size: 1.35rem; line-height: 1.25; transition: color 0.15s; }
+  .excerpt { margin: 0 0 0.5rem; color: var(--muted); }
+  time { font-size: 0.85rem; color: var(--muted); }
 </style>

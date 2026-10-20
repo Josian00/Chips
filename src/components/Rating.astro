@@ -1,0 +1,21 @@
+---
+interface Props {
+  rating: number;
+}
+
+const { rating } = Astro.props;
+---
+
+<span class="rating" title={`Rated ${rating} out of 10`}><strong>{rating}</strong>/10</span>
+
+<style>
+  .rating {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+</style>

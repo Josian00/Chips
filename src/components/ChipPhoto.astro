@@ -1,0 +1,64 @@
+---
+import type { Chip } from '../lib/chips';
+import { url } from '../lib/url';
+
+interface Props {
+  chip: Chip;
+  size?: 'card' | 'hero';
+}
+
+const { chip, size = 'card' } = Astro.props;
+const { image, brand, name, flavour } = chip.data;
+
+// Without a photo, draw a warm placeholder whose hue is stable per chip.
+const hue = [...chip.id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 50 + 15;
+---
+
+{
+  image ? (
+    <img class:list={['photo', size]} src={url(image)} alt={`${brand} ${name}`} loading="lazy" />
+  ) : (
+    <div
+      class:list={['photo', 'placeholder', size]}
+      style={`--hue: ${hue}`}
+      role="img"
+      aria-label={`${brand} ${name}`}
+    >
+      <span class="emoji" aria-hidden="true">🥔</span>
+      <span class="label">{flavour}</span>
+    </div>
+  )
+}
+
+<style>
+  .photo {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .hero { aspect-ratio: 16 / 9; max-height: 28rem; }
+  .placeholder {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 30% 25%, hsl(var(--hue) 95% 78%), transparent 60%),
+      linear-gradient(135deg, hsl(var(--hue) 85% 62%), hsl(calc(var(--hue) - 15) 75% 42%));
+  }
+  .emoji { font-size: clamp(3rem, 12vw, 6rem); filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.25)); }
+  .hero .emoji { font-size: clamp(4rem, 16vw, 9rem); }
+  .label {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.85);
+    color: #3b2a17;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+</style>

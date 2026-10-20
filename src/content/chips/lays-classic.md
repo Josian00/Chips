@@ -1,10 +1,11 @@
 ---
+title: "Lay's Classic: the control sample"
 name: Classic
 brand: Lay's
 flavour: Salted
 country: United States
 rating: 6.5
-reviewed: 2026-10-19
+reviewed: 2026-10-05
 ---
 
 The baseline every other chip gets measured against. Light, thin and salty,

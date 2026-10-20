@@ -2,8 +2,8 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Each chip is a Markdown file in src/content/chips/. The frontmatter holds
-// the facts; the Markdown body is the review.
+// Each chip is a blog post: a Markdown file in src/content/chips/. The
+// frontmatter holds the facts; the Markdown body is the review.
 const chips = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/chips' }),
   schema: z.object({
@@ -13,6 +13,12 @@ const chips = defineCollection({
     country: z.string(),
     rating: z.number().min(0).max(10),
     reviewed: z.coerce.date(),
+    // Optional post headline; defaults to "<brand> <name>".
+    title: z.string().optional(),
+    // Optional teaser shown on cards; defaults to the review's first paragraph.
+    excerpt: z.string().optional(),
+    // Optional photo, a path inside public/ (e.g. images/walkers.jpg).
+    image: z.string().optional(),
   }),
 });
 

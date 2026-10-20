@@ -6,7 +6,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'Reviews and ratings of chips and crisps from around the world.' } = Astro.props;
+const { title, description = 'A food blog about chips and crisps from around the world.' } = Astro.props;
 ---
 
 <!doctype html>
@@ -16,57 +16,118 @@ const { title, description = 'Reviews and ratings of chips and crisps from aroun
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
-    <title>{title === 'Chips' ? title : `${title} · Chips`}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito+Sans:wght@400;600;700&display=swap"
+    />
+    <title>{title === 'Chips' ? 'Chips · A crisp tasting journal' : `${title} · Chips`}</title>
   </head>
   <body>
-    <header>
-      <nav>
-        <a class="brand" href={url()}>🥔 Chips</a>
-        <a href={url('chips/')}>All chips</a>
-      </nav>
+    <header class="site-header">
+      <div class="inner">
+        <a class="brand" href={url()}>
+          <span class="logo" aria-hidden="true">🥔</span>
+          <span>
+            <span class="name">Chips</span>
+            <span class="tagline">A crisp tasting journal</span>
+          </span>
+        </a>
+        <nav>
+          <a href={url()}>Latest</a>
+          <a href={url('chips/')}>All reviews</a>
+        </nav>
+      </div>
     </header>
     <main>
       <slot />
     </main>
-    <footer>
-      <p>A blog and database of chips and crisps.</p>
+    <footer class="site-footer">
+      <div class="inner">
+        <p>Made with salty fingers. Every bag tasted, every crumb counted.</p>
+      </div>
     </footer>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --bg: #fffaf0;
-    --fg: #2b2118;
-    --muted: #7a6a58;
-    --accent: #d98e04;
-    --card: #ffffff;
-    --border: #eadfcc;
+    --bg: #fbf6ee;
+    --fg: #2e2117;
+    --muted: #7d6a57;
+    --accent: #c4511d;
+    --accent-text: #b2461a;
+    --on-accent: #fff;
+    --card: #fffdf9;
+    --border: #e7d9c4;
+    --radius: 14px;
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
     color-scheme: light dark;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1b1712;
-      --fg: #f3ebdf;
-      --muted: #b3a48f;
-      --accent: #f2b53a;
-      --card: #26201a;
-      --border: #3a3128;
+      --bg: #1c1612;
+      --fg: #f4ebe0;
+      --muted: #b9a690;
+      --accent: #e0703a;
+      --accent-text: #f08a55;
+      --on-accent: #1c1612;
+      --card: #251d17;
+      --border: #3d3127;
     }
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-family: var(--sans);
+    font-size: 1.0625rem;
     background: var(--bg);
     color: var(--fg);
-    line-height: 1.6;
+    line-height: 1.65;
   }
-  header, main, footer { max-width: 56rem; margin: 0 auto; padding: 1rem; }
-  nav { display: flex; gap: 1.5rem; align-items: baseline; }
-  nav .brand { font-weight: 700; font-size: 1.25rem; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  footer { color: var(--muted); font-size: 0.875rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.2; }
+  a { color: var(--accent-text); }
+  .inner, main { max-width: 68rem; margin: 0 auto; padding: 0 1rem; }
+  main { padding-top: 2rem; padding-bottom: 3rem; }
+
+  .site-header { border-bottom: 1px solid var(--border); background: var(--card); }
+  .site-header .inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.75rem; color: inherit; text-decoration: none; }
+  .logo { font-size: 2.25rem; }
+  .brand .name { display: block; font-family: var(--serif); font-size: 1.75rem; font-weight: 700; line-height: 1; }
+  .brand .tagline { display: block; color: var(--muted); font-size: 0.85rem; font-style: italic; }
+  nav { display: flex; gap: 1.5rem; }
+  nav a {
+    color: var(--fg);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  nav a:hover { color: var(--accent-text); }
+
+  .site-footer { border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; text-align: center; }
+  .site-footer .inner { padding-top: 1.5rem; padding-bottom: 2rem; }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0 1.25rem;
+    font-size: 1.6rem;
+  }
+  .section-title::after { content: ''; flex: 1; border-top: 2px dotted var(--border); }
+  .card-grid { display: grid; gap: 2rem 1.5rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
   .muted { color: var(--muted); }
 </style>

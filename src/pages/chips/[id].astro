@@ -1,50 +1,30 @@
 ---
-import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { url } from '../../lib/url';
+import ChipCard from '../../components/ChipCard.astro';
+import Post from '../../components/Post.astro';
+import { excerpt, getChipsByDate, postTitle, suggestions, type Chip } from '../../lib/chips';
 
 export async function getStaticPaths() {
-  const chips = await getCollection('chips');
-  return chips.map((chip) => ({ params: { id: chip.id }, props: { chip } }));
+  const chips = await getChipsByDate();
+  return chips.map((chip) => ({ params: { id: chip.id }, props: { chip, related: suggestions(chips, chip) } }));
 }
 
 interface Props {
-  chip: CollectionEntry<'chips'>;
+  chip: Chip;
+  related: Chip[];
 }
 
-const { chip } = Astro.props;
-const { name, brand, flavour, country, rating, reviewed } = chip.data;
-const { Content } = await render(chip);
+const { chip, related } = Astro.props;
 ---
 
-<Base title={`${brand} ${name}`} description={`${brand} ${name} (${flavour}) rated ${rating}/10.`}>
-  <p><a href={url('chips/')}>← All chips</a></p>
-  <article>
-    <h1>{brand} {name}</h1>
-    <dl>
-      <dt>Brand</dt><dd>{brand}</dd>
-      <dt>Flavour</dt><dd>{flavour}</dd>
-      <dt>Country</dt><dd>{country}</dd>
-      <dt>Rating</dt><dd class="rating">{rating}/10</dd>
-      <dt>Reviewed</dt>
-      <dd><time datetime={reviewed.toISOString()}>{reviewed.toLocaleDateString('en-GB', { dateStyle: 'long' })}</time></dd>
-    </dl>
-    <h2>Review</h2>
-    <Content />
-  </article>
-</Base>
-
-<style>
-  dl {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.25rem 1.5rem;
-    padding: 1rem 1.25rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
+<Base title={postTitle(chip)} description={excerpt(chip)}>
+  <Post chip={chip} />
+  {
+    related.length > 0 && (
+      <section>
+        <h2 class="section-title">You might also like</h2>
+        <div class="card-grid">{related.map((other) => <ChipCard chip={other} />)}</div>
+      </section>
+    )
   }
-  dt { color: var(--muted); }
-  dd { margin: 0; }
-  .rating { font-weight: 700; color: var(--accent); }
-</style>
+</Base>
