@@ -37,6 +37,7 @@ const { title, description = 'A food blog about chips and crisps from around the
         <nav>
           <a href={url()}>Latest</a>
           <a href={url('chips/')}>All reviews</a>
+          <a href={url('what-are-chips/')}>What are chips?</a>
         </nav>
       </div>
     </header>
@@ -106,7 +107,7 @@ const { title, description = 'A food blog about chips and crisps from around the
   .logo { font-size: 2.25rem; }
   .brand .name { display: block; font-family: var(--serif); font-size: 1.75rem; font-weight: 700; line-height: 1; }
   .brand .tagline { display: block; color: var(--muted); font-size: 0.85rem; font-style: italic; }
-  nav { display: flex; gap: 1.5rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
   nav a {
     color: var(--fg);
     text-decoration: none;
