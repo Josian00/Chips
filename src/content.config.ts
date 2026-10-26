@@ -19,6 +19,22 @@ const chips = defineCollection({
     excerpt: z.string().optional(),
     // Optional photo, a path inside public/ (e.g. images/walkers.jpg).
     image: z.string().optional(),
+    // Optional EAN/UPC barcode from the bag. When set, the daily price job
+    // looks the chip up on Open Prices (prices.openfoodfacts.org).
+    barcode: z.string().regex(/^\d{8,14}$/).optional(),
+    // Optional online stores selling the chip, shown under "Where to buy".
+    // `price` is a price you saw yourself; `checked` is when you saw it.
+    stores: z
+      .array(
+        z.object({
+          name: z.string(),
+          url: z.url(),
+          price: z.number().positive().optional(),
+          currency: z.string().length(3).default('EUR'),
+          checked: z.coerce.date().optional(),
+        }),
+      )
+      .default([]),
   }),
 });
 

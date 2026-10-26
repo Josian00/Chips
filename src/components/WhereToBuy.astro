@@ -1,0 +1,98 @@
+---
+import type { Chip } from '../lib/chips';
+import { formatDate } from '../lib/chips';
+import { formatPrice, priceSummary } from '../lib/prices';
+
+interface Props {
+  chip: Chip;
+}
+
+const { chip } = Astro.props;
+const { stores, barcode } = chip.data;
+const summary = priceSummary(chip);
+
+// Sparkline of the tracked prices, oldest on the left.
+const width = 200;
+const height = 40;
+let line = '';
+if (summary && summary.points.length > 1) {
+  const span = summary.high - summary.low || 1;
+  const step = width / (summary.points.length - 1);
+  line = summary.points
+    .map((point, i) => `${(i * step).toFixed(1)},${(height - ((point.price - summary.low) / span) * (height - 4) - 2).toFixed(1)}`)
+    .join(' ');
+}
+---
+
+{
+  (stores.length > 0 || barcode) && (
+    <aside class="buy">
+      <h2>Where to buy</h2>
+      {stores.length > 0 && (
+        <ul class="stores">
+          {stores.map((store) => (
+            <li>
+              <a href={store.url} target="_blank" rel="noopener nofollow">{store.name}</a>
+              {store.price !== undefined && (
+                <span class="price">
+                  {formatPrice(store.price, store.currency)}
+                  {store.checked && <small>seen {formatDate(store.checked)}</small>}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+      {summary ? (
+        <div class="tracker">
+          <h3>Price tracker</h3>
+          <p class="latest">
+            <strong>{formatPrice(summary.latest.price, summary.latest.currency)}</strong>
+            {summary.latest.store && <> at {summary.latest.store}</>}
+            {summary.latest.city && <>, {summary.latest.city}</>}
+            <small>on {formatDate(new Date(summary.latest.date))}</small>
+          </p>
+          {line && (
+            <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label="Price history">
+              <polyline points={line} />
+            </svg>
+          )}
+          {summary.points.length > 1 && (
+            <p class="range">
+              Range {formatPrice(summary.low, summary.latest.currency)} to {formatPrice(summary.high, summary.latest.currency)} over {summary.points.length} sightings
+            </p>
+          )}
+          <p class="source">
+            Prices from <a href={`https://prices.openfoodfacts.org/products/${barcode}`} target="_blank" rel="noopener">Open Prices</a>, updated daily.
+          </p>
+        </div>
+      ) : (
+        barcode && (
+          <p class="source">
+            No prices tracked yet. <a href={`https://prices.openfoodfacts.org/products/${barcode}`} target="_blank" rel="noopener">Add one on Open Prices</a>.
+          </p>
+        )
+      )}
+    </aside>
+  )
+}
+
+<style>
+  .buy {
+    margin-top: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+  h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+  h3 { margin: 1rem 0 0.4rem; font-size: 1rem; }
+  .stores { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+  .stores li { display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  .price { text-align: right; }
+  small { display: block; color: var(--muted); font-size: 0.8rem; }
+  .latest { margin: 0; }
+  svg { display: block; width: 100%; height: 2.5rem; margin: 0.5rem 0; overflow: visible; }
+  polyline { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .range, .source { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; }
+</style>

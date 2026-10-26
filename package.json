@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "prices": "node scripts/update-prices.mjs",
     "astro": "astro"
   },
   "dependencies": {

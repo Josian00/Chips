@@ -6,6 +6,7 @@ import { url } from '../lib/url';
 import ChipPhoto from './ChipPhoto.astro';
 import FactBox from './FactBox.astro';
 import Rating from './Rating.astro';
+import WhereToBuy from './WhereToBuy.astro';
 
 interface Props {
   chip: Chip;
@@ -34,7 +35,10 @@ const href = url(`chips/${chip.id}/`);
   <ChipPhoto chip={chip} size="hero" />
   <div class="columns">
     <div class="review"><Content /></div>
-    <FactBox chip={chip} />
+    <div class="sidebar">
+      <FactBox chip={chip} />
+      <WhereToBuy chip={chip} />
+    </div>
   </div>
 </article>
 
