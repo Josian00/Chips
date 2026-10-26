@@ -1,0 +1,53 @@
+---
+// Reader comments via Giscus (https://giscus.app). Comments are stored as
+// GitHub Discussions in this repo, so readers sign in with GitHub to post and
+// moderation (hide, delete, lock, block) happens on GitHub. Nothing renders
+// until repoId and categoryId are filled in; get both from giscus.app.
+const giscus = {
+  repo: 'Josian00/Chips',
+  repoId: '',
+  category: 'Comments',
+  categoryId: '',
+};
+
+interface Props {
+  // Stable key for the discussion thread, so moving the site keeps comments.
+  term: string;
+}
+
+const { term } = Astro.props;
+const enabled = giscus.repoId !== '' && giscus.categoryId !== '';
+---
+
+{
+  enabled && (
+    <section class="comments">
+      <h2 class="section-title">Comments</h2>
+      <p class="note">Sign in with GitHub to join in. Keep it about the chips and be kind.</p>
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={giscus.repo}
+        data-repo-id={giscus.repoId}
+        data-category={giscus.category}
+        data-category-id={giscus.categoryId}
+        data-mapping="specific"
+        data-term={term}
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      />
+    </section>
+  )
+}
+
+<style>
+  .comments { max-width: 46rem; margin: 3rem auto 0; }
+  .note { margin: 0 0 1rem; color: var(--muted); }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ChipCard from '../../components/ChipCard.astro';
+import Comments from '../../components/Comments.astro';
 import Post from '../../components/Post.astro';
 import { excerpt, getChipsByDate, postTitle, suggestions, type Chip } from '../../lib/chips';
 
@@ -27,4 +28,5 @@ const { chip, related } = Astro.props;
       </section>
     )
   }
+  <Comments term={`chips/${chip.id}`} />
 </Base>
