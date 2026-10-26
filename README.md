@@ -44,9 +44,9 @@ Each chip page has a comment section powered by [Giscus](https://giscus.app). Co
 The section stays hidden until it is set up once:
 
 1. In **Settings → General → Features**, tick **Discussions**.
-2. In the **Discussions** tab, create a category called `Comments` with the **Announcement** format, so only you and Giscus can start threads (readers can still reply).
+2. In the **Discussions** tab, use the `General` category (or create one with the **Announcement** format, so only you and Giscus can start threads, and update `category` and `categoryId` to match).
 3. Install the [Giscus app](https://github.com/apps/giscus) on this repo only.
-4. On [giscus.app](https://giscus.app), enter `Josian00/Chips` and pick the `Comments` category, then copy `data-repo-id` and `data-category-id` into `src/components/Comments.astro`.
+4. On [giscus.app](https://giscus.app), enter `Josian00/Chips` pick the category, then copy `data-repo-id` and `data-category-id` into `src/components/Comments.astro`.
 
 To moderate: hide, edit or delete a comment from the discussion on GitHub, lock a discussion to close its comments, or block a user under **Settings → Moderation options**. **Interaction limits** there can restrict commenting to existing contributors during a spam wave.
 
