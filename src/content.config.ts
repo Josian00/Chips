@@ -35,6 +35,20 @@ const chips = defineCollection({
         }),
       )
       .default([]),
+    // Optional ingredients, shown in an "Ingredients" box under the review.
+    // `contains` and `mayContain` name allergens as the label does (e.g. Milk).
+    // `source` says where the list was copied from; set `verified: true` once
+    // you have checked it against the bag yourself.
+    ingredients: z
+      .object({
+        list: z.array(z.string()).min(1),
+        contains: z.array(z.string()).default([]),
+        mayContain: z.array(z.string()).default([]),
+        source: z.object({ name: z.string(), url: z.url().optional() }).optional(),
+        checked: z.coerce.date().optional(),
+        verified: z.boolean().default(false),
+      })
+      .optional(),
   }),
 });
 

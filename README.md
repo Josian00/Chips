@@ -35,6 +35,19 @@ stores:                   # optional "Where to buy" links
     price: 2.75           # optional price you saw yourself
     currency: GBP         # defaults to EUR
     checked: 2026-10-19   # optional date you saw it
+ingredients:              # optional "Ingredients" box under the review
+  list:                   # one entry per ingredient, as printed on the pack
+    - Dehydrated Potatoes
+    - Vegetable Oils (Sunflower, Corn, Rice Bran)
+    - Wheat Starch
+    - Salt
+  contains: [Wheat]       # allergens, highlighted in the list above
+  mayContain: [Milk]      # "may contain" warnings
+  source:                 # where you copied the list from
+    name: Tesco product page
+    url: https://www.tesco.com/groceries/en-GB/search?query=pringles%20original
+  checked: 2026-10-19
+  verified: true          # set once you've checked it against the bag
 ---
 
 Your review goes here, in Markdown.
@@ -43,6 +56,10 @@ Your review goes here, in Markdown.
 The newest review (by `reviewed` date) is featured in full on the home page, with the others suggested below it. Without an `image`, a coloured placeholder is drawn.
 
 The fields are checked by the schema in `src/content.config.ts`, so a missing or mistyped field fails the build with a clear error.
+
+## Ingredients and allergens
+
+A chip with `ingredients` gets an "Ingredients" box under its review. Allergens named in `contains` are highlighted in the list (for Milk, words like whey, cheese and butter are highlighted too; see `src/lib/ingredients.ts`). Until `verified: true` is set, the box says the list hasn't been checked against the bag yet, and it always tells readers with allergies to read the pack.
 
 ## Prices and store links
 

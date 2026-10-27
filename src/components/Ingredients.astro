@@ -1,0 +1,66 @@
+---
+import type { Chip } from '../lib/chips';
+import { formatDate } from '../lib/chips';
+import { highlight } from '../lib/ingredients';
+
+interface Props {
+  chip: Chip;
+}
+
+const { ingredients } = Astro.props.chip.data;
+---
+
+{
+  ingredients && (
+    <section class="ingredients" aria-labelledby="ingredients-title">
+      <h2 id="ingredients-title">Ingredients</h2>
+      <ul class="list">
+        {ingredients.list.map((item) => (
+          <li>{highlight(item, ingredients.contains).map((part) => (part.allergen ? <strong>{part.text}</strong> : part.text))}</li>
+        ))}
+      </ul>
+      <dl class="allergens">
+        <dt>Contains</dt>
+        <dd>{ingredients.contains.length > 0 ? ingredients.contains.join(', ') : 'No major allergens listed'}</dd>
+        {ingredients.mayContain.length > 0 && (
+          <>
+            <dt>May contain</dt>
+            <dd>{ingredients.mayContain.join(', ')}</dd>
+          </>
+        )}
+      </dl>
+      <p class="note">
+        {ingredients.verified ? 'Checked against the bag' : 'Not yet checked against the bag'}
+        {ingredients.source && (
+          <>
+            {' · '}from{' '}
+            {ingredients.source.url ? (
+              <a href={ingredients.source.url} target="_blank" rel="noopener nofollow">{ingredients.source.name}</a>
+            ) : (
+              ingredients.source.name
+            )}
+          </>
+        )}
+        {ingredients.checked && <> on {formatDate(ingredients.checked)}</>}. Recipes change and differ by country, so
+        always read the pack if you have an allergy.
+      </p>
+    </section>
+  )
+}
+
+<style>
+  .ingredients {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+  h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+  .list { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.25rem; }
+  strong { color: var(--accent-text); }
+  .allergens { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1.25rem; margin: 1rem 0 0; }
+  dt { color: var(--muted); }
+  dd { margin: 0; font-weight: 600; }
+  .note { margin: 1rem 0 0; color: var(--muted); font-size: 0.85rem; }
+</style>

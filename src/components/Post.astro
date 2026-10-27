@@ -5,6 +5,7 @@ import { formatDate, postTitle, readingMinutes } from '../lib/chips';
 import { url } from '../lib/url';
 import ChipPhoto from './ChipPhoto.astro';
 import FactBox from './FactBox.astro';
+import Ingredients from './Ingredients.astro';
 import Rating from './Rating.astro';
 import WhereToBuy from './WhereToBuy.astro';
 
@@ -34,7 +35,10 @@ const href = url(`chips/${chip.id}/`);
   </header>
   <ChipPhoto chip={chip} size="hero" />
   <div class="columns">
-    <div class="review"><Content /></div>
+    <div class="review">
+      <Content />
+      <Ingredients chip={chip} />
+    </div>
     <div class="sidebar">
       <FactBox chip={chip} />
       <WhereToBuy chip={chip} />
@@ -77,6 +81,7 @@ const href = url(`chips/${chip.id}/`);
     .columns { grid-template-columns: 1fr; }
   }
   .review { font-size: 1.15rem; }
+  .review :global(.ingredients) { font-size: 1rem; }
   .review :global(p:first-child) { margin-top: 0; }
   .review :global(p:first-child::first-letter) {
     float: left;
