@@ -1,0 +1,21 @@
+---
+import { analyticsEnabled, umami } from '../lib/analytics';
+---
+
+{
+  analyticsEnabled && (
+    <>
+      <script is:inline defer src={umami.src} data-website-id={umami.websiteId} data-domains={umami.domains} />
+      <script is:inline>
+        // Count clicks on links that leave the site. Links with their own
+        // data-umami-event (store links) are counted by Umami itself.
+        document.addEventListener('click', (event) => {
+          const link = event.target instanceof Element && event.target.closest('a[href]');
+          if (!link || link.closest('[data-umami-event]') || link.host === location.host) return;
+          if (!/^https?:$/.test(link.protocol)) return;
+          window.umami?.track('Outbound link', { url: link.href, page: location.pathname });
+        });
+      </script>
+    </>
+  )
+}

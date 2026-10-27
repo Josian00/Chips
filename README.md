@@ -62,6 +62,22 @@ The section stays hidden until it is set up once:
 
 To moderate: hide, edit or delete a comment from the discussion on GitHub, lock a discussion to close its comments, or block a user under **Settings → Moderation options**. **Interaction limits** there can restrict commenting to existing contributors during a spam wave.
 
+## Visitor analytics
+
+Visits are tracked with [Umami Cloud](https://umami.is) (free for up to 100k events a month). It shows page views, visitors and visits, visit length and bounce rate, referrers and UTM campaigns, browser, OS, device type, screen size, language, and country, region and city. On top of that the site sends two events:
+
+- `Store link`: a click on a "Where to buy" link, with the `store` and `chip` it was for.
+- `Outbound link`: a click on any other link that leaves the site, with its `url` and the `page` it was on.
+
+Umami sets no cookies and does not store IP addresses or other personal data, so it generally needs no cookie banner under GDPR. The footer says that visits are counted, and links to Umami's privacy page. If you add a privacy policy, mention Umami there too.
+
+Tracking stays off until it is set up once:
+
+1. Sign up at [cloud.umami.is](https://cloud.umami.is) and add a website with the domain `josian00.github.io`.
+2. Copy its **Website ID** into `websiteId` in `src/lib/analytics.ts`.
+
+Only visits on `josian00.github.io` are counted, so local `npm run dev` sessions don't show up. If the site moves to another domain, update `domains` there too. To hide your own visits on the live site, run `localStorage.setItem('umami.disabled', 1)` once in your browser's console.
+
 ## Project layout
 
 | Path | What it is |
@@ -73,6 +89,7 @@ To moderate: hide, edit or delete a comment from the discussion on GitHub, lock 
 | `src/pages/chips/[id].astro` | Blog post for one chip, with "You might also like" |
 | `src/components/` | Post, card, photo, fact box, rating and comments pieces |
 | `src/lib/chips.ts` | Sorting, excerpts and suggestion logic |
+| `src/lib/analytics.ts`, `src/components/Analytics.astro` | Umami analytics setup and outbound link tracking |
 | `src/lib/prices.ts`, `src/data/prices.json` | Tracked price history and formatting |
 | `scripts/update-prices.mjs` | Fetches prices from Open Prices |
 | `src/layouts/Base.astro` | Shared layout and styles |
