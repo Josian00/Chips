@@ -49,6 +49,18 @@ The fields are checked by the schema in `src/content.config.ts`, so a missing or
 Each chip can list online stores in `stores`; they appear in a "Where to buy" box next to the fact box.
 
 Chips with a `barcode` also get a price tracker. `.github/workflows/prices.yml` runs once a day (or by hand from the Actions tab), fetches the newest prices for each barcode from [Open Prices](https://prices.openfoodfacts.org), a free and open price database from Open Food Facts, and saves them to `src/data/prices.json`. If anything changed it commits the file and redeploys the site. Run it locally with `npm run prices`. Open Prices is crowdsourced, so a chip only shows prices once someone has recorded one there; you can add your own receipts at <https://prices.openfoodfacts.org>.
+## Reader comments
+
+Each chip page has a comment section powered by [Giscus](https://giscus.app). Comments are stored as GitHub Discussions in this repo, so there is no server or database to run. Readers sign in with GitHub to comment, which keeps out anonymous spam bots, and you moderate on GitHub.
+
+The section stays hidden until it is set up once:
+
+1. In **Settings → General → Features**, tick **Discussions**.
+2. In the **Discussions** tab, use the `General` category (or create one with the **Announcement** format, so only you and Giscus can start threads, and update `category` and `categoryId` to match).
+3. Install the [Giscus app](https://github.com/apps/giscus) on this repo only.
+4. On [giscus.app](https://giscus.app), enter `Josian00/Chips` pick the category, then copy `data-repo-id` and `data-category-id` into `src/components/Comments.astro`.
+
+To moderate: hide, edit or delete a comment from the discussion on GitHub, lock a discussion to close its comments, or block a user under **Settings → Moderation options**. **Interaction limits** there can restrict commenting to existing contributors during a spam wave.
 
 ## Project layout
 
@@ -59,7 +71,7 @@ Chips with a `barcode` also get a price tracker. `.github/workflows/prices.yml` 
 | `src/pages/index.astro` | Home page (newest post in full, then suggestions) |
 | `src/pages/chips/index.astro` | Table of all chips |
 | `src/pages/chips/[id].astro` | Blog post for one chip, with "You might also like" |
-| `src/components/` | Post, card, photo, fact box and rating pieces |
+| `src/components/` | Post, card, photo, fact box, rating and comments pieces |
 | `src/lib/chips.ts` | Sorting, excerpts and suggestion logic |
 | `src/lib/prices.ts`, `src/data/prices.json` | Tracked price history and formatting |
 | `scripts/update-prices.mjs` | Fetches prices from Open Prices |
