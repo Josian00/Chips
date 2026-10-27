@@ -1,4 +1,6 @@
 ---
+import Analytics from '../components/Analytics.astro';
+import { analyticsEnabled } from '../lib/analytics';
 import { url } from '../lib/url';
 
 interface Props {
@@ -23,6 +25,7 @@ const { title, description = 'A food blog about chips and crisps from around the
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito+Sans:wght@400;600;700&display=swap"
     />
     <title>{title === 'Chips' ? 'Chips · A crisp tasting journal' : `${title} · Chips`}</title>
+    <Analytics />
   </head>
   <body>
     <header class="site-header">
@@ -47,6 +50,14 @@ const { title, description = 'A food blog about chips and crisps from around the
     <footer class="site-footer">
       <div class="inner">
         <p>Made with salty fingers. Every bag tasted, every crumb counted.</p>
+        {
+          analyticsEnabled && (
+            <p class="privacy">
+              Visits are counted anonymously with <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami</a>, without
+              cookies or personal data.
+            </p>
+          )
+        }
       </div>
     </footer>
   </body>
@@ -120,6 +131,7 @@ const { title, description = 'A food blog about chips and crisps from around the
 
   .site-footer { border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; text-align: center; }
   .site-footer .inner { padding-top: 1.5rem; padding-bottom: 2rem; }
+  .site-footer .privacy { font-size: 0.8rem; }
 
   .section-title {
     display: flex;
