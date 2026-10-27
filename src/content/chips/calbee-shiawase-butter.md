@@ -6,6 +6,9 @@ flavour: Honey Butter
 country: Japan
 rating: 9
 reviewed: 2026-10-19
+stores:
+  - name: "Amazon"
+    url: "https://www.amazon.com/s?k=calbee+shiawase+butter"
 ---
 
 Sweet and salty in a way that shouldn't work but does. The honey butter

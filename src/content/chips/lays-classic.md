@@ -6,6 +6,11 @@ flavour: Salted
 country: United States
 rating: 6.5
 reviewed: 2026-10-05
+stores:
+  - name: "Walmart"
+    url: "https://www.walmart.com/search?q=lays%20classic%20potato%20chips"
+  - name: "Amazon"
+    url: "https://www.amazon.com/s?k=lays+classic+potato+chips"
 ---
 
 The baseline every other chip gets measured against. Light, thin and salty,
