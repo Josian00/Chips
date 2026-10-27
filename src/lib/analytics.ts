@@ -7,7 +7,7 @@
 // it from cloud.umami.is under Settings → Websites → Edit.
 export const umami = {
   src: 'https://cloud.umami.is/script.js',
-  websiteId: '',
+  websiteId: 'b4291fff-dd37-4e32-806d-145334106042',
   // Only count visits on the live site, not on localhost or previews.
   domains: 'josian00.github.io',
 };
