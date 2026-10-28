@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import { useTranslations, type Lang } from '../i18n/ui';
+import { legalReady } from '../lib/legal';
+
+interface Props {
+  lang: Lang;
+  title: string;
+}
+
+const { lang, title } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Base title={title}>
+  <article class="legal">
+    <h1>{title}</h1>
+    {!legalReady && <p class="notice draft">{t('legal.draft')}</p>}
+    {lang !== 'de' && <p class="notice">{t('legal.german')}</p>}
+    <slot />
+  </article>
+</Base>
+
+<style>
+  .legal { max-width: 46rem; margin: 0 auto; }
+  h1 { margin: 0 0 1.5rem; font-size: clamp(2rem, 5vw, 3rem); }
+  .legal :global(h2) { margin: 2rem 0 0.5rem; font-size: 1.3rem; }
+  .legal :global(h3) { margin: 1.25rem 0 0.25rem; font-size: 1.05rem; }
+  .legal :global(address) { font-style: normal; }
+  .notice {
+    padding: 0.6rem 0.9rem;
+    border-left: 3px solid var(--accent);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .draft { border-color: #e0b400; }
+</style>

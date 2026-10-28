@@ -1,47 +1,69 @@
 ---
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/nunito-sans/wght.css';
 import Analytics from '../components/Analytics.astro';
+import { languages, langs, locales, useTranslations, type Lang } from '../i18n/ui';
 import { analyticsEnabled } from '../lib/analytics';
-import { url } from '../lib/url';
+import { legalReady } from '../lib/legal';
+import { splitPath, url } from '../lib/url';
 
 interface Props {
   title: string;
   description?: string;
+  // Languages this page exists in, for the language switch and hreflang
+  // links. Defaults to all of them.
+  available?: Lang[];
 }
 
-const { title, description = 'A food blog about chips and crisps from around the world.' } = Astro.props;
+const { lang, path } = splitPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const { title, description = t('site.description'), available = langs } = Astro.props;
+const alternates = available.map((other) => ({ lang: other, href: new URL(url(path, other), Astro.site).href }));
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta property="og:locale" content={locales[lang].replace('-', '_')} />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito+Sans:wght@400;600;700&display=swap"
-    />
-    <title>{title === 'Chips' ? 'Chips · A crisp tasting journal' : `${title} · Chips`}</title>
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.lang} href={alt.href} />)}
+    {alternates.length > 1 && <link rel="alternate" hreflang="x-default" href={alternates[0]!.href} />}
+    <title>{title === 'Chips' ? `Chips · ${t('site.tagline')}` : `${title} · Chips`}</title>
     <Analytics />
   </head>
   <body>
     <header class="site-header">
       <div class="inner">
-        <a class="brand" href={url()}>
+        <a class="brand" href={url('', lang)}>
           <span class="logo" aria-hidden="true">🥔</span>
           <span>
             <span class="name">Chips</span>
-            <span class="tagline">A crisp tasting journal</span>
+            <span class="tagline">{t('site.tagline')}</span>
           </span>
         </a>
-        <nav>
-          <a href={url()}>Latest</a>
-          <a href={url('chips/')}>All reviews</a>
-          <a href={url('what-are-chips/')}>What are chips?</a>
-        </nav>
+        <div class="menus">
+          <nav>
+            <a href={url('', lang)}>{t('nav.latest')}</a>
+            <a href={url('chips/', lang)}>{t('nav.all')}</a>
+            <a href={url('what-are-chips/', lang)}>{t('nav.what')}</a>
+          </nav>
+          <nav class="langs" aria-label={t('nav.language')}>
+            {
+              alternates.map((alt) =>
+                alt.lang === lang ? (
+                  <span aria-current="true" title={languages[alt.lang]}>{alt.lang.toUpperCase()}</span>
+                ) : (
+                  <a href={url(path, alt.lang)} hreflang={alt.lang} lang={alt.lang} title={languages[alt.lang]}>
+                    {alt.lang.toUpperCase()}
+                  </a>
+                ),
+              )
+            }
+          </nav>
+        </div>
       </div>
     </header>
     <main>
@@ -49,12 +71,20 @@ const { title, description = 'A food blog about chips and crisps from around the
     </main>
     <footer class="site-footer">
       <div class="inner">
-        <p>Made with salty fingers. Every bag tasted, every crumb counted.</p>
+        <p>{t('footer.motto')}</p>
         {
           analyticsEnabled && (
             <p class="privacy">
-              Visits are counted anonymously with <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami</a>, without
-              cookies or personal data.
+              {t('footer.analytics.before')} <a href="https://umami.is/privacy" target="_blank" rel="noopener">Umami</a>{t('footer.analytics.after')}
+            </p>
+          )
+        }
+        {
+          legalReady && (
+            <p class="legal">
+              <a href={url('impressum/', lang)}>{t('footer.imprint')}</a>
+              <span aria-hidden="true">·</span>
+              <a href={url('datenschutz/', lang)}>{t('footer.privacy')}</a>
             </p>
           )
         }
@@ -74,8 +104,8 @@ const { title, description = 'A food blog about chips and crisps from around the
     --card: #fffdf9;
     --border: #e7d9c4;
     --radius: 14px;
-    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-    --sans: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+    --sans: 'Nunito Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
     color-scheme: light dark;
   }
   @media (prefers-color-scheme: dark) {
@@ -118,6 +148,7 @@ const { title, description = 'A food blog about chips and crisps from around the
   .logo { font-size: 2.25rem; }
   .brand .name { display: block; font-family: var(--serif); font-size: 1.75rem; font-weight: 700; line-height: 1; }
   .brand .tagline { display: block; color: var(--muted); font-size: 0.85rem; font-style: italic; }
+  .menus { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
   nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
   nav a {
     color: var(--fg);
@@ -128,10 +159,22 @@ const { title, description = 'A food blog about chips and crisps from around the
     text-transform: uppercase;
   }
   nav a:hover { color: var(--accent-text); }
+  .langs {
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .langs a, .langs span { padding: 0.15rem 0.65rem; font-size: 0.8rem; }
+  .langs span { background: var(--accent); color: var(--on-accent); }
 
   .site-footer { border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; text-align: center; }
   .site-footer .inner { padding-top: 1.5rem; padding-bottom: 2rem; }
   .site-footer .privacy { font-size: 0.8rem; }
+  .site-footer .legal { display: flex; justify-content: center; gap: 0.5rem; font-size: 0.85rem; }
 
   .section-title {
     display: flex;

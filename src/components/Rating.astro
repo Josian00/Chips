@@ -1,12 +1,16 @@
 ---
+import { defaultLang, locales, useTranslations, type Lang } from '../i18n/ui';
+
 interface Props {
   rating: number;
+  lang?: Lang;
 }
 
-const { rating } = Astro.props;
+const { rating, lang = defaultLang } = Astro.props;
+const shown = rating.toLocaleString(locales[lang]);
 ---
 
-<span class="rating" title={`Rated ${rating} out of 10`}><strong>{rating}</strong>/10</span>
+<span class="rating" title={useTranslations(lang)('rating.title', { rating: shown })}><strong>{shown}</strong>/10</span>
 
 <style>
   .rating {

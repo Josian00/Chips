@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import ChipCard from '../../components/ChipCard.astro';
+import Post from '../../components/Post.astro';
+import { langPaths, useTranslations, type Lang } from '../../i18n/ui';
+import { getChipsByDate, suggestions } from '../../lib/chips';
+import { url } from '../../lib/url';
+
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const chips = await getChipsByDate(lang);
+const [latest] = chips;
+const more = suggestions(chips, latest, 6);
+---
+
+<Base title="Chips">
+  {
+    latest ? (
+      <>
+        <p class="eyebrow">{t('home.latest')}</p>
+        <Post chip={latest} linkTitle headingLevel="h2" />
+      </>
+    ) : (
+      <p class="muted">{t('home.empty')}</p>
+    )
+  }
+
+  {
+    more.length > 0 && (
+      <section>
+        <h2 class="section-title">{t('home.more')}</h2>
+        <div class="card-grid">{more.map((chip) => <ChipCard chip={chip} />)}</div>
+        <p class="all"><a href={url('chips/', lang)}>{t('home.browse', { count: chips.length })}</a></p>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .eyebrow {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--muted);
+  }
+  .all { margin-top: 2rem; text-align: center; font-weight: 700; }
+</style>

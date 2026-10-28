@@ -1,22 +1,25 @@
 ---
-import type { Chip } from '../lib/chips';
+import { useTranslations } from '../i18n/ui';
+import type { LocalChip } from '../lib/chips';
 import Rating from './Rating.astro';
 
 interface Props {
-  chip: Chip;
+  chip: LocalChip;
 }
 
-const { brand, name, flavour, country, rating } = Astro.props.chip.data;
+const { lang, data } = Astro.props.chip;
+const { brand, name, flavour, country, rating } = data;
+const t = useTranslations(lang);
 ---
 
 <aside class="facts">
-  <h2>The facts</h2>
+  <h2>{t('facts.title')}</h2>
   <dl>
-    <dt>Chip</dt><dd>{name}</dd>
-    <dt>Brand</dt><dd>{brand}</dd>
-    <dt>Flavour</dt><dd>{flavour}</dd>
-    <dt>Country</dt><dd>{country}</dd>
-    <dt>Verdict</dt><dd><Rating rating={rating} /></dd>
+    <dt>{t('facts.chip')}</dt><dd>{name}</dd>
+    <dt>{t('facts.brand')}</dt><dd>{brand}</dd>
+    <dt>{t('facts.flavour')}</dt><dd>{flavour}</dd>
+    <dt>{t('facts.country')}</dt><dd>{country}</dd>
+    <dt>{t('facts.verdict')}</dt><dd><Rating rating={rating} lang={lang} /></dd>
   </dl>
 </aside>
 

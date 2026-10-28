@@ -1,15 +1,17 @@
 ---
 import { render } from 'astro:content';
-import type { Chip } from '../lib/chips';
+import { useTranslations } from '../i18n/ui';
+import type { LocalChip } from '../lib/chips';
 import { formatDate, postTitle, readingMinutes } from '../lib/chips';
 import { url } from '../lib/url';
 import ChipPhoto from './ChipPhoto.astro';
 import FactBox from './FactBox.astro';
+import Ingredients from './Ingredients.astro';
 import Rating from './Rating.astro';
 import WhereToBuy from './WhereToBuy.astro';
 
 interface Props {
-  chip: Chip;
+  chip: LocalChip;
   // On the home page the title links to the post's own page.
   linkTitle?: boolean;
   headingLevel?: 'h1' | 'h2';
@@ -17,24 +19,30 @@ interface Props {
 
 const { chip, linkTitle = false, headingLevel: Heading = 'h1' } = Astro.props;
 const { brand, country, rating, reviewed } = chip.data;
-const { Content } = await render(chip);
-const href = url(`chips/${chip.id}/`);
+const { lang, translated } = chip;
+const t = useTranslations(lang);
+const { Content } = await render(chip.entry);
+const href = url(`chips/${chip.id}/`, lang);
 ---
 
 <article class="post">
   <header>
     <p class="kicker">{brand} · {country}</p>
-    <Heading class="title">{linkTitle ? <a href={href}>{postTitle(chip)}</a> : postTitle(chip)}</Heading>
+    <Heading class="title" lang={translated ? undefined : 'en'}>{linkTitle ? <a href={href}>{postTitle(chip)}</a> : postTitle(chip)}</Heading>
     <p class="byline">
-      <time datetime={reviewed.toISOString()}>{formatDate(reviewed)}</time>
+      <time datetime={reviewed.toISOString()}>{formatDate(reviewed, lang)}</time>
       <span aria-hidden="true">·</span>
-      <span>{readingMinutes(chip)} min read</span>
-      <Rating rating={rating} />
+      <span>{t('post.minRead', { minutes: readingMinutes(chip) })}</span>
+      <Rating rating={rating} lang={lang} />
     </p>
   </header>
   <ChipPhoto chip={chip} size="hero" />
   <div class="columns">
-    <div class="review"><Content /></div>
+    <div class="review">
+      {!translated && <p class="untranslated">{t('post.untranslated')}</p>}
+      <div class="body" lang={translated ? undefined : 'en'}><Content /></div>
+      <Ingredients chip={chip} />
+    </div>
     <div class="sidebar">
       <FactBox chip={chip} />
       <WhereToBuy chip={chip} />
@@ -77,8 +85,17 @@ const href = url(`chips/${chip.id}/`);
     .columns { grid-template-columns: 1fr; }
   }
   .review { font-size: 1.15rem; }
-  .review :global(p:first-child) { margin-top: 0; }
-  .review :global(p:first-child::first-letter) {
+  .review :global(.ingredients) { font-size: 1rem; }
+  .untranslated {
+    margin: 0 0 1rem;
+    padding: 0.6rem 0.9rem;
+    border-left: 3px solid var(--accent);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .body :global(p:first-child) { margin-top: 0; }
+  .body :global(p:first-child::first-letter) {
     float: left;
     margin: 0.1rem 0.5rem 0 0;
     font-family: var(--serif);

@@ -1,0 +1,110 @@
+---
+import { locales, useTranslations } from '../i18n/ui';
+import type { LocalChip } from '../lib/chips';
+import { formatDate } from '../lib/chips';
+import { allergenName, highlight } from '../lib/ingredients';
+
+interface Props {
+  chip: LocalChip;
+}
+
+const { data, lang, ingredientsTranslated } = Astro.props.chip;
+const { ingredients, nutrition } = data;
+const t = useTranslations(lang);
+const names = (list: string[]) => list.map((name) => allergenName(name, lang)).join(', ');
+const grams = (value: number) => `${value.toLocaleString(locales[lang], { maximumFractionDigits: 1 })} g`;
+const nutritionRows = nutrition && [
+  { label: t('nutrition.fat'), value: nutrition.fat },
+  { label: t('nutrition.saturates'), value: nutrition.saturates, sub: true },
+  { label: t('nutrition.carbohydrate'), value: nutrition.carbohydrate },
+  { label: t('nutrition.sugars'), value: nutrition.sugars, sub: true },
+  ...(nutrition.fibre !== undefined ? [{ label: t('nutrition.fibre'), value: nutrition.fibre }] : []),
+  { label: t('nutrition.protein'), value: nutrition.protein },
+  { label: t('nutrition.salt'), value: nutrition.salt },
+];
+---
+
+{
+  ingredients && (
+    <section class="ingredients" aria-labelledby="ingredients-title">
+      <h2 id="ingredients-title">{t('ingredients.title')}</h2>
+      <ul class="list">
+        {ingredients.list.map((item) => (
+          <li>{highlight(item, ingredients.contains).map((part) => (part.allergen ? <strong>{part.text}</strong> : part.text))}</li>
+        ))}
+      </ul>
+      <dl class="allergens">
+        <dt>{t('ingredients.contains')}</dt>
+        <dd>{ingredients.contains.length > 0 ? names(ingredients.contains) : t('ingredients.none')}</dd>
+        {ingredients.mayContain.length > 0 && (
+          <>
+            <dt>{t('ingredients.mayContain')}</dt>
+            <dd>{names(ingredients.mayContain)}</dd>
+          </>
+        )}
+      </dl>
+      <p class="note">
+        {ingredientsTranslated && <>{t('ingredients.translated')} </>}
+        {ingredients.verified ? t('ingredients.verified') : t('ingredients.unverified')}
+        {ingredients.source && (
+          <>
+            {' · '}
+            {t('ingredients.from')}{' '}
+            {ingredients.source.url ? (
+              <a href={ingredients.source.url} target="_blank" rel="noopener nofollow">{ingredients.source.name}</a>
+            ) : (
+              ingredients.source.name
+            )}
+          </>
+        )}
+        {ingredients.checked && <> {t('ingredients.on', { date: formatDate(ingredients.checked, lang) })}</>}. {t('ingredients.warning')}
+      </p>
+    </section>
+  )
+}
+{
+  nutrition && nutritionRows && (
+    <section class="ingredients nutrition" aria-labelledby="nutrition-title">
+      <h2 id="nutrition-title">{t('nutrition.title')}</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="row">{t('nutrition.energy')}</th>
+            <td>
+              {nutrition.energyKj.toLocaleString(locales[lang])} kJ / {nutrition.energyKcal.toLocaleString(locales[lang])} kcal
+            </td>
+          </tr>
+          {nutritionRows.map((row) => (
+            <tr class:list={{ sub: row.sub }}>
+              <th scope="row">{row.label}</th>
+              <td>{grams(row.value)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )
+}
+
+<style>
+  .ingredients {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+  .nutrition { margin-top: 1.25rem; }
+  h2 { margin: 0 0 0.75rem; font-size: 1.1rem; }
+  .list { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.25rem; }
+  strong { color: var(--accent-text); }
+  .allergens { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1.25rem; margin: 1rem 0 0; }
+  dt { color: var(--muted); }
+  dd { margin: 0; font-weight: 600; }
+  .note { margin: 1rem 0 0; color: var(--muted); font-size: 0.85rem; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 0.3rem 0; border-bottom: 1px solid var(--border); text-align: left; font-weight: 400; }
+  td { text-align: right; white-space: nowrap; }
+  tr:last-child th, tr:last-child td { border-bottom: none; }
+  .sub th { padding-left: 1rem; color: var(--muted); }
+</style>

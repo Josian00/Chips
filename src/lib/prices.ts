@@ -1,5 +1,6 @@
 import prices from '../data/prices.json';
-import type { Chip } from './chips';
+import { defaultLang, locales, type Lang } from '../i18n/ui';
+import type { LocalChip } from './chips';
 
 // One price someone recorded on Open Prices; see scripts/update-prices.mjs.
 export interface PricePoint {
@@ -22,7 +23,7 @@ export interface PriceSummary {
 
 const tracked = prices as Record<string, { barcode: string; history: PricePoint[] } | undefined>;
 
-export function priceSummary(chip: Chip): PriceSummary | undefined {
+export function priceSummary(chip: LocalChip): PriceSummary | undefined {
   const history = tracked[chip.id]?.history ?? [];
   const latest = history[0];
   if (!latest) return undefined;
@@ -31,6 +32,7 @@ export function priceSummary(chip: Chip): PriceSummary | undefined {
   return { latest, low: Math.min(...values), high: Math.max(...values), points };
 }
 
-export function formatPrice(amount: number, currency: string): string {
-  return new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(amount);
+// "€2.75" in English, "2,75 €" in German.
+export function formatPrice(amount: number, currency: string, lang: Lang = defaultLang): string {
+  return new Intl.NumberFormat(locales[lang], { style: 'currency', currency }).format(amount);
 }

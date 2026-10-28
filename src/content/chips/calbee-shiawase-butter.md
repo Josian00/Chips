@@ -7,8 +7,36 @@ country: Japan
 rating: 9
 reviewed: 2026-10-19
 stores:
-  - name: "Amazon"
+  - name: "Amazon.de"
+    url: "https://www.amazon.de/s?k=calbee+shiawase+butter"
+  - name: "Amazon.com"
     url: "https://www.amazon.com/s?k=calbee+shiawase+butter"
+    country: US
+ingredients:
+  list:
+    - Potato (non-GMO)
+    - Palm oil
+    - Sugar
+    - Salt
+    - Butter powder
+    - Fructose
+    - Corn starch
+    - Hydrolysed protein (soy)
+    - Mascarpone
+    - Cream cheese powder
+    - Cream powder
+    - Yeast extract powder
+    - Parsley
+    - Honey powder
+    - Monosodium glutamate (E621)
+    - Flavouring
+    - Sweeteners (aspartame, sucralose, stevia)
+    - Acidulant (citric acid)
+  contains: [Milk, Soy]
+  source:
+    name: "Nikan Kitchen product page (Japanese import)"
+    url: "https://www.nikankitchen.com/en/products/3317/calbee-potato-chips-shiawase-honey-and-butter-60g"
+  checked: 2026-10-27
 ---
 
 Sweet and salty in a way that shouldn't work but does. The honey butter

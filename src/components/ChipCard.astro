@@ -1,29 +1,30 @@
 ---
-import type { Chip } from '../lib/chips';
+import type { LocalChip } from '../lib/chips';
 import { excerpt, formatDate, postTitle } from '../lib/chips';
 import { url } from '../lib/url';
 import ChipPhoto from './ChipPhoto.astro';
 import Rating from './Rating.astro';
 
 interface Props {
-  chip: Chip;
+  chip: LocalChip;
 }
 
 const { chip } = Astro.props;
 const { country, rating, reviewed } = chip.data;
+const { lang } = chip;
 ---
 
 <article class="card">
-  <a href={url(`chips/${chip.id}/`)}>
+  <a href={url(`chips/${chip.id}/`, lang)}>
     <ChipPhoto chip={chip} />
     <div class="body">
       <p class="meta">
         <span>{country}</span>
-        <Rating rating={rating} />
+        <Rating rating={rating} lang={lang} />
       </p>
-      <h3>{postTitle(chip)}</h3>
-      <p class="excerpt">{excerpt(chip)}</p>
-      <time datetime={reviewed.toISOString()}>{formatDate(reviewed)}</time>
+      <h3 lang={chip.translated ? undefined : 'en'}>{postTitle(chip)}</h3>
+      <p class="excerpt" lang={chip.translated ? undefined : 'en'}>{excerpt(chip)}</p>
+      <time datetime={reviewed.toISOString()}>{formatDate(reviewed, lang)}</time>
     </div>
   </a>
 </article>

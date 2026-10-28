@@ -1,0 +1,172 @@
+---
+import LegalField from '../../../components/LegalField.astro';
+import LegalPage from '../../../components/LegalPage.astro';
+import { langPaths, type Lang } from '../../../i18n/ui';
+import { analyticsEnabled } from '../../../lib/analytics';
+import { formatDate } from '../../../lib/chips';
+import { legal } from '../../../lib/legal';
+
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const updated = formatDate(new Date(legal.updated), lang);
+---
+
+{
+  lang === 'de' ? (
+    <LegalPage lang={lang} title="Datenschutzerklärung">
+      <p>
+        Diese Erklärung beschreibt, welche personenbezogenen Daten beim Besuch dieser Website verarbeitet werden. Die Seite
+        hat keine Benutzerkonten, kein Kontaktformular und keinen Newsletter und setzt keine Cookies.
+      </p>
+
+      <h2>1. Verantwortlicher</h2>
+      <address>
+        <LegalField value={legal.name} placeholder="Vorname Nachname" />
+        <br />
+        <LegalField value={legal.street} placeholder="Straße Hausnummer" />
+        <br />
+        <LegalField value={legal.city} placeholder="PLZ Ort" />
+        <br />
+        E-Mail: <LegalField value={legal.email} placeholder="E-Mail-Adresse" />
+      </address>
+
+      <h2>2. Hosting bei GitHub Pages</h2>
+      <p>
+        Die Website wird von GitHub Pages ausgeliefert, einem Dienst der GitHub, Inc., 88 Colin P. Kelly Jr. Street, San
+        Francisco, CA 94107, USA. Beim Aufruf jeder Seite verarbeitet GitHub technisch notwendige Daten, insbesondere
+        deine IP-Adresse, Datum und Uhrzeit des Abrufs, die aufgerufene Adresse, den Referrer und die Browserkennung, um
+        die Seite auszuliefern und vor Missbrauch zu schützen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; mein
+        berechtigtes Interesse liegt in einer sicheren und zuverlässigen Bereitstellung der Website. Die Daten können in
+        die USA übermittelt werden. GitHub ist unter dem EU-US Data Privacy Framework zertifiziert (Art. 45 DSGVO).
+        Einzelheiten: <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement">Datenschutzerklärung von GitHub</a>.
+      </p>
+
+      <h2>3. Schriftarten</h2>
+      <p>
+        Die Schriftarten werden zusammen mit der Website von GitHub Pages ausgeliefert. Es besteht keine Verbindung zu
+        Google Fonts oder anderen Schriftanbietern.
+      </p>
+
+      {analyticsEnabled && (
+        <>
+          <h2>4. Reichweitenmessung mit Umami</h2>
+          <p>
+            Um zu sehen, welche Tests gelesen werden, nutze ich Umami Cloud der Umami Software, Inc. (USA). Umami setzt keine Cookies und speichert
+            keine IP-Adressen. Erfasst werden die aufgerufene Seite, der Referrer, Browser, Betriebssystem, Gerätetyp,
+            Bildschirmgröße, Sprache und das grob aus der IP-Adresse abgeleitete Land, Region und Stadt sowie Klicks auf
+            Shop- und andere externe Links. Ein Rückschluss auf einzelne Personen ist damit nicht möglich. Rechtsgrundlage
+            ist Art. 6 Abs. 1 lit. f DSGVO; mein berechtigtes Interesse ist eine datensparsame Auswertung der Nutzung.
+            Wenn dein Browser „Do Not Track“ sendet, wird dein Besuch nicht gezählt. Details:{' '}
+            <a href="https://umami.is/privacy">Datenschutzerklärung von Umami</a>.
+          </p>
+        </>
+      )}
+
+      <h2>{analyticsEnabled ? '5' : '4'}. Kommentare mit Giscus</h2>
+      <p>
+        Unter den Tests kannst du über Giscus kommentieren. Die Kommentare werden als GitHub Discussions bei GitHub, Inc.
+        gespeichert. Giscus wird erst geladen, wenn du auf „Kommentare anzeigen“ klickst; erst dann werden Daten wie deine
+        IP-Adresse an giscus.app und GitHub übertragen. Zum Schreiben meldest du dich mit deinem GitHub-Konto an; dein
+        Kommentar ist dann mit deinem GitHub-Namen öffentlich sichtbar. Rechtsgrundlage ist deine Einwilligung (Art. 6
+        Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG), die du jederzeit widerrufen kannst, indem du die Kommentare nicht mehr
+        lädst und eigene Kommentare auf GitHub löschst. Details: <a href="https://github.com/giscus/giscus/blob/main/PRIVACY-POLICY.md">Datenschutzerklärung von Giscus</a>{' '}
+        und <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement">von GitHub</a>.
+      </p>
+
+      <h2>{analyticsEnabled ? '6' : '5'}. Links zu Shops und anderen Websites</h2>
+      <p>
+        Links zu Shops wie REWE oder Amazon sind einfache Links ohne Tracking-Parameter. Erst wenn du einen anklickst,
+        verlässt du diese Website, und es gilt die Datenschutzerklärung des jeweiligen Anbieters. Preise von Open Prices
+        werden beim Erstellen der Website abgerufen, nicht in deinem Browser.
+      </p>
+
+      <h2>{analyticsEnabled ? '7' : '6'}. Deine Rechte</h2>
+      <p>
+        Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der
+        Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage von Art.
+        6 Abs. 1 lit. f DSGVO (Art. 21). Eine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen.
+        Schreib mir dazu an <LegalField value={legal.email} placeholder="E-Mail-Adresse" />. Außerdem kannst du dich bei
+        einer Datenschutz-Aufsichtsbehörde beschweren, etwa bei der Behörde deines Bundeslandes.
+      </p>
+
+      <p class="muted">Stand: {updated}</p>
+    </LegalPage>
+  ) : (
+    <LegalPage lang={lang} title="Privacy policy">
+      <p>
+        This policy explains which personal data is processed when you visit this site. The site has no user accounts, no
+        contact form and no newsletter, and sets no cookies.
+      </p>
+
+      <h2>1. Controller</h2>
+      <address>
+        <LegalField value={legal.name} placeholder="First and last name" />
+        <br />
+        <LegalField value={legal.street} placeholder="Street and number" />
+        <br />
+        <LegalField value={legal.city} placeholder="Postcode and town" />
+        <br />
+        Email: <LegalField value={legal.email} placeholder="Email address" />
+      </address>
+
+      <h2>2. Hosting on GitHub Pages</h2>
+      <p>
+        The site is served by GitHub Pages, a service of GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA
+        94107, USA. For every page you open, GitHub processes the technical data needed to deliver it and protect it from
+        abuse, in particular your IP address, the date and time, the address requested, the referrer and your browser's
+        user agent. The legal basis is Art. 6(1)(f) GDPR; my legitimate interest is serving the site securely and
+        reliably. Data may be transferred to the USA. GitHub is certified under the EU-US Data Privacy Framework (Art. 45
+        GDPR). Details: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>.
+      </p>
+
+      <h2>3. Fonts</h2>
+      <p>The fonts are served by GitHub Pages along with the site. There is no connection to Google Fonts or any other font service.</p>
+
+      {analyticsEnabled && (
+        <>
+          <h2>4. Visitor statistics with Umami</h2>
+          <p>
+            To see which reviews get read, I use Umami Cloud by Umami Software, Inc. (USA). Umami sets no cookies and stores no IP
+            addresses. It records the page, the referrer, browser, operating system, device type, screen size, language,
+            and the country, region and city roughly derived from the IP address, plus clicks on store links and other
+            links that leave the site. None of this identifies you. The legal basis is Art. 6(1)(f) GDPR; my legitimate
+            interest is measuring use of the site with as little data as possible. If your browser sends "Do Not Track",
+            your visit is not counted. Details: <a href="https://umami.is/privacy">Umami's privacy policy</a>.
+          </p>
+        </>
+      )}
+
+      <h2>{analyticsEnabled ? '5' : '4'}. Comments with Giscus</h2>
+      <p>
+        You can comment on reviews through Giscus. Comments are stored as GitHub Discussions at GitHub, Inc. Giscus only
+        loads when you click "Show comments"; only then is data such as your IP address sent to giscus.app and GitHub. To
+        write a comment you sign in with your GitHub account, and the comment is public under your GitHub name. The legal
+        basis is your consent (Art. 6(1)(a) GDPR, § 25(1) TDDDG), which you can withdraw at any time by not loading the
+        comments and deleting your comments on GitHub. Details: <a href="https://github.com/giscus/giscus/blob/main/PRIVACY-POLICY.md">Giscus's privacy policy</a>{' '}
+        and <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's</a>.
+      </p>
+
+      <h2>{analyticsEnabled ? '6' : '5'}. Links to shops and other sites</h2>
+      <p>
+        Links to shops such as REWE or Amazon are plain links without tracking parameters. Only when you click one do you
+        leave this site, and that shop's privacy policy applies. Prices from Open Prices are fetched when the site is
+        built, not in your browser.
+      </p>
+
+      <h2>{analyticsEnabled ? '7' : '6'}. Your rights</h2>
+      <p>
+        You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of processing
+        (Art. 18), data portability (Art. 20) and to object to processing based on Art. 6(1)(f) GDPR (Art. 21). You can
+        withdraw consent at any time with effect for the future. To do so, email <LegalField value={legal.email} placeholder="Email address" />.
+        You can also complain to a data protection supervisory authority, for example the one in your federal state.
+      </p>
+
+      <p class="muted">Last updated: {updated}</p>
+    </LegalPage>
+  )
+}

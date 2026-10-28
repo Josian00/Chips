@@ -1,8 +1,11 @@
 ---
+import { defaultLang, useTranslations, type Lang } from '../i18n/ui';
+
 // Reader comments via Giscus (https://giscus.app). Comments are stored as
 // GitHub Discussions in this repo, so readers sign in with GitHub to post and
-// moderation (hide, delete, lock, block) happens on GitHub. Nothing renders
-// unless repoId and categoryId are set; get both from giscus.app.
+// moderation (hide, delete, lock, block) happens on GitHub. Giscus loads
+// from giscus.app and GitHub, so it waits for the reader to click first.
+// Nothing renders unless repoId and categoryId are set; get both from giscus.app.
 const giscus = {
   repo: 'Josian00/Chips',
   repoId: 'R_kgDOVPOqxg',
@@ -12,42 +15,85 @@ const giscus = {
 
 interface Props {
   // Stable key for the discussion thread, so moving the site keeps comments.
+  // The English and German page of a chip share one thread.
   term: string;
+  lang?: Lang;
 }
 
-const { term } = Astro.props;
+const { term, lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
 const enabled = giscus.repoId !== '' && giscus.categoryId !== '';
 ---
 
 {
   enabled && (
     <section class="comments">
-      <h2 class="section-title">Comments</h2>
-      <p class="note">Sign in with GitHub to join in. Keep it about the chips and be kind.</p>
-      <script
-        is:inline
-        src="https://giscus.app/client.js"
+      <h2 class="section-title">{t('comments.title')}</h2>
+      <p class="note">{t('comments.note')}</p>
+      {/* Giscus only loads after a click, so no data goes to GitHub before the reader agrees. */}
+      <div
+        class="consent"
+        data-giscus
         data-repo={giscus.repo}
         data-repo-id={giscus.repoId}
         data-category={giscus.category}
         data-category-id={giscus.categoryId}
-        data-mapping="specific"
         data-term={term}
-        data-strict="1"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async
-      />
+        data-lang={lang}
+      >
+        <p>{t('comments.consent')}</p>
+        <button type="button">{t('comments.load')}</button>
+      </div>
     </section>
   )
 }
 
+<script>
+  for (const box of document.querySelectorAll<HTMLElement>('[data-giscus]')) {
+    box.querySelector('button')?.addEventListener('click', () => {
+      const { repo, repoId, category, categoryId, term, lang } = box.dataset;
+      const script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      Object.entries({
+        repo,
+        repoId,
+        category,
+        categoryId,
+        mapping: 'specific',
+        term,
+        strict: '1',
+        reactionsEnabled: '1',
+        emitMetadata: '0',
+        inputPosition: 'top',
+        theme: 'preferred_color_scheme',
+        lang,
+      }).forEach(([key, value]) => (script.dataset[key] = value ?? ''));
+      box.replaceWith(script);
+    });
+  }
+</script>
+
 <style>
   .comments { max-width: 46rem; margin: 3rem auto 0; }
   .note { margin: 0 0 1rem; color: var(--muted); }
+  .consent {
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .consent p { margin: 0 0 1rem; color: var(--muted); font-size: 0.9rem; }
+  button {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
 </style>
