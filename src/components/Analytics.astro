@@ -5,7 +5,7 @@ import { analyticsEnabled, umami } from '../lib/analytics';
 {
   analyticsEnabled && (
     <>
-      <script is:inline defer src={umami.src} data-website-id={umami.websiteId} data-domains={umami.domains} />
+      <script is:inline defer src={umami.src} data-website-id={umami.websiteId} data-domains={umami.domains} data-do-not-track="true" />
       <script is:inline>
         // Count clicks on links that leave the site. Links with their own
         // data-umami-event (store links) are counted by Umami itself.

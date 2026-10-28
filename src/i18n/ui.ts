@@ -1,0 +1,173 @@
+// Interface text in every language the site speaks. English is the default
+// and lives at the site root; every other language gets a prefix (/de/).
+export const languages = { en: 'English', de: 'Deutsch' } as const;
+export type Lang = keyof typeof languages;
+export const defaultLang: Lang = 'en';
+export const langs = Object.keys(languages) as Lang[];
+
+// BCP 47 locale used for dates and prices.
+export const locales: Record<Lang, string> = { en: 'en-GB', de: 'de-DE' };
+
+const en = {
+  'site.tagline': 'A crisp tasting journal',
+  'site.description': 'A food blog about chips and crisps from around the world.',
+  'nav.latest': 'Latest',
+  'nav.all': 'All reviews',
+  'nav.what': 'What are chips?',
+  'nav.language': 'Language',
+  'footer.motto': 'Made with salty fingers. Every bag tasted, every crumb counted.',
+  'footer.analytics.before': 'Visits are counted anonymously with',
+  'footer.analytics.after': ', without cookies or personal data.',
+  'footer.imprint': 'Imprint',
+  'footer.privacy': 'Privacy',
+  'home.latest': 'Latest tasting',
+  'home.empty': 'No reviews yet. Add one in src/content/chips/.',
+  'home.more': 'More to snack on',
+  'home.browse': 'Browse all {count} reviews →',
+  'post.minRead': '{minutes} min read',
+  'post.untranslated': 'This review is not available in English yet.',
+  'post.related': 'You might also like',
+  'rating.title': 'Rated {rating} out of 10',
+  'facts.title': 'The facts',
+  'facts.chip': 'Chip',
+  'facts.brand': 'Brand',
+  'facts.flavour': 'Flavour',
+  'facts.country': 'Country',
+  'facts.verdict': 'Verdict',
+  'buy.title': 'Where to buy',
+  'buy.seen': 'seen {date}',
+  'buy.tracker': 'Price tracker',
+  'buy.at': 'at',
+  'buy.on': 'on {date}',
+  'buy.history': 'Price history',
+  'buy.range': 'Range {low} to {high} over {count} sightings',
+  'buy.source.before': 'Prices from',
+  'buy.source.after': ', updated daily.',
+  'buy.none': 'No prices tracked yet.',
+  'buy.add': 'Add one on Open Prices',
+  'ingredients.title': 'Ingredients',
+  'ingredients.contains': 'Contains',
+  'ingredients.mayContain': 'May contain',
+  'ingredients.none': 'No major allergens listed',
+  'ingredients.verified': 'Checked against the bag',
+  'ingredients.unverified': 'Not yet checked against the bag',
+  'ingredients.from': 'from',
+  'ingredients.on': 'on {date}',
+  'ingredients.warning': 'Recipes change and differ by country, so always read the pack if you have an allergy.',
+  'ingredients.translated': 'Translated from the original label.',
+  'nutrition.title': 'Nutrition per 100 g',
+  'nutrition.energy': 'Energy',
+  'nutrition.fat': 'Fat',
+  'nutrition.saturates': 'of which saturates',
+  'nutrition.carbohydrate': 'Carbohydrate',
+  'nutrition.sugars': 'of which sugars',
+  'nutrition.fibre': 'Fibre',
+  'nutrition.protein': 'Protein',
+  'nutrition.salt': 'Salt',
+  'comments.title': 'Comments',
+  'comments.note': 'Sign in with GitHub to join in. Keep it about the chips and be kind.',
+  'comments.load': 'Show comments',
+  'comments.consent':
+    'Comments are hosted by Giscus and GitHub. Showing them loads content from giscus.app and github.com, which can see your IP address.',
+  'all.title': 'All reviews',
+  'all.description': "Every chip we've tasted, best rated first.",
+  'all.lede': "Every chip we've tasted so far, {count} in total, best rated first.",
+  'all.reviewed': 'Reviewed',
+  'all.rating': 'Rating',
+  'legal.draft': 'Draft: the site owner still needs to fill in the details marked like this.',
+  'legal.german': 'The German version of this page is the legally binding one.',
+};
+
+type Key = keyof typeof en;
+
+const de: Record<Key, string> = {
+  'site.tagline': 'Ein knuspriges Verkostungstagebuch',
+  'site.description': 'Ein Food-Blog über Chips aus aller Welt.',
+  'nav.latest': 'Neu',
+  'nav.all': 'Alle Tests',
+  'nav.what': 'Was sind Chips?',
+  'nav.language': 'Sprache',
+  'footer.motto': 'Mit salzigen Fingern gemacht. Jede Tüte probiert, jeder Krümel gezählt.',
+  'footer.analytics.before': 'Besuche werden anonym mit',
+  'footer.analytics.after': ' gezählt, ohne Cookies und ohne personenbezogene Daten.',
+  'footer.imprint': 'Impressum',
+  'footer.privacy': 'Datenschutz',
+  'home.latest': 'Neueste Verkostung',
+  'home.empty': 'Noch keine Tests. Lege einen in src/content/chips/ an.',
+  'home.more': 'Mehr zum Knabbern',
+  'home.browse': 'Alle {count} Tests ansehen →',
+  'post.minRead': '{minutes} Min. Lesezeit',
+  'post.untranslated': 'Dieser Test ist noch nicht auf Deutsch verfügbar, hier ist das englische Original.',
+  'post.related': 'Das könnte dir auch schmecken',
+  'rating.title': 'Bewertet mit {rating} von 10',
+  'facts.title': 'Die Fakten',
+  'facts.chip': 'Sorte',
+  'facts.brand': 'Marke',
+  'facts.flavour': 'Geschmack',
+  'facts.country': 'Land',
+  'facts.verdict': 'Urteil',
+  'buy.title': 'Wo kaufen',
+  'buy.seen': 'gesehen am {date}',
+  'buy.tracker': 'Preisverlauf',
+  'buy.at': 'bei',
+  'buy.on': 'am {date}',
+  'buy.history': 'Preisverlauf',
+  'buy.range': 'Zwischen {low} und {high} bei {count} Meldungen',
+  'buy.source.before': 'Preise von',
+  'buy.source.after': ', täglich aktualisiert.',
+  'buy.none': 'Noch keine Preise erfasst.',
+  'buy.add': 'Einen Preis auf Open Prices eintragen',
+  'ingredients.title': 'Zutaten',
+  'ingredients.contains': 'Enthält',
+  'ingredients.mayContain': 'Kann Spuren enthalten von',
+  'ingredients.none': 'Keine Hauptallergene angegeben',
+  'ingredients.verified': 'Mit der Packung abgeglichen',
+  'ingredients.unverified': 'Noch nicht mit der Packung abgeglichen',
+  'ingredients.from': 'Quelle:',
+  'ingredients.on': 'am {date}',
+  'ingredients.warning': 'Rezepturen ändern sich und unterscheiden sich je nach Land. Bei Allergien bitte immer die Packung lesen.',
+  'ingredients.translated': 'Aus dem Original-Etikett übersetzt.',
+  'nutrition.title': 'Nährwerte pro 100 g',
+  'nutrition.energy': 'Brennwert',
+  'nutrition.fat': 'Fett',
+  'nutrition.saturates': 'davon gesättigte Fettsäuren',
+  'nutrition.carbohydrate': 'Kohlenhydrate',
+  'nutrition.sugars': 'davon Zucker',
+  'nutrition.fibre': 'Ballaststoffe',
+  'nutrition.protein': 'Eiweiß',
+  'nutrition.salt': 'Salz',
+  'comments.title': 'Kommentare',
+  'comments.note': 'Melde dich mit GitHub an, um mitzureden. Bleib beim Thema Chips und sei nett.',
+  'comments.load': 'Kommentare anzeigen',
+  'comments.consent':
+    'Die Kommentare werden über Giscus und GitHub bereitgestellt. Beim Anzeigen werden Inhalte von giscus.app und github.com geladen, die dabei deine IP-Adresse sehen.',
+  'all.title': 'Alle Tests',
+  'all.description': 'Alle Chips, die wir probiert haben, die besten zuerst.',
+  'all.lede': 'Alle Chips, die wir bisher probiert haben, insgesamt {count}, die besten zuerst.',
+  'all.reviewed': 'Getestet',
+  'all.rating': 'Bewertung',
+  'legal.draft': 'Entwurf: Die so markierten Angaben muss der Betreiber noch ausfüllen.',
+  'legal.german': 'Rechtlich verbindlich ist die deutsche Fassung dieser Seite.',
+};
+
+const ui: Record<Lang, Record<Key, string>> = { en, de };
+
+// t('home.browse', { count: 3 }) → "Browse all 3 reviews →"
+export function useTranslations(lang: Lang) {
+  return (key: Key, vars: Record<string, string | number> = {}) =>
+    ui[lang][key].replace(/\{(\w+)\}/g, (_, name: string) => String(vars[name] ?? `{${name}}`));
+}
+
+export function isLang(value: unknown): value is Lang {
+  return typeof value === 'string' && value in languages;
+}
+
+// getStaticPaths() for pages under src/pages/[...lang]/: English at the
+// root, every other language under its prefix.
+export function langParams(lang: Lang) {
+  return { lang: lang === defaultLang ? undefined : lang };
+}
+
+export function langPaths() {
+  return langs.map((lang) => ({ params: langParams(lang), props: { lang } }));
+}

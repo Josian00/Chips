@@ -1,15 +1,20 @@
 ---
-import type { Chip } from '../lib/chips';
+import { useTranslations } from '../i18n/ui';
+import type { LocalChip } from '../lib/chips';
 import { formatDate } from '../lib/chips';
 import { formatPrice, priceSummary } from '../lib/prices';
 
 interface Props {
-  chip: Chip;
+  chip: LocalChip;
 }
 
 const { chip } = Astro.props;
+const { lang } = chip;
+const t = useTranslations(lang);
 const { stores, barcode } = chip.data;
 const summary = priceSummary(chip);
+const price = (amount: number, currency: string) => formatPrice(amount, currency, lang);
+const regionName = new Intl.DisplayNames([lang], { type: 'region' });
 
 // Sparkline of the tracked prices, oldest on the left.
 const width = 200;
@@ -27,25 +32,32 @@ if (summary && summary.points.length > 1) {
 {
   (stores.length > 0 || barcode) && (
     <aside class="buy">
-      <h2>Where to buy</h2>
+      <h2>{t('buy.title')}</h2>
       {stores.length > 0 && (
         <ul class="stores">
           {stores.map((store) => (
             <li>
-              <a
-                href={store.url}
-                target="_blank"
-                rel="noopener nofollow"
-                data-umami-event="Store link"
-                data-umami-event-store={store.name}
-                data-umami-event-chip={chip.id}
-              >
-                {store.name}
-              </a>
+              <span>
+                <a
+                  href={store.url}
+                  target="_blank"
+                  rel="noopener nofollow"
+                  data-umami-event="Store link"
+                  data-umami-event-store={store.name}
+                  data-umami-event-chip={chip.id}
+                >
+                  {store.name}
+                </a>
+                {store.country && (
+                  <abbr class="region" title={regionName.of(store.country)}>
+                    {store.country}
+                  </abbr>
+                )}
+              </span>
               {store.price !== undefined && (
                 <span class="price">
-                  {formatPrice(store.price, store.currency)}
-                  {store.checked && <small>seen {formatDate(store.checked)}</small>}
+                  {price(store.price, store.currency)}
+                  {store.checked && <small>{t('buy.seen', { date: formatDate(store.checked, lang) })}</small>}
                 </span>
               )}
             </li>
@@ -54,31 +66,35 @@ if (summary && summary.points.length > 1) {
       )}
       {summary ? (
         <div class="tracker">
-          <h3>Price tracker</h3>
+          <h3>{t('buy.tracker')}</h3>
           <p class="latest">
-            <strong>{formatPrice(summary.latest.price, summary.latest.currency)}</strong>
-            {summary.latest.store && <> at {summary.latest.store}</>}
+            <strong>{price(summary.latest.price, summary.latest.currency)}</strong>
+            {summary.latest.store && <> {t('buy.at')} {summary.latest.store}</>}
             {summary.latest.city && <>, {summary.latest.city}</>}
-            <small>on {formatDate(new Date(summary.latest.date))}</small>
+            <small>{t('buy.on', { date: formatDate(new Date(summary.latest.date), lang) })}</small>
           </p>
           {line && (
-            <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label="Price history">
+            <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label={t('buy.history')}>
               <polyline points={line} />
             </svg>
           )}
           {summary.points.length > 1 && (
             <p class="range">
-              Range {formatPrice(summary.low, summary.latest.currency)} to {formatPrice(summary.high, summary.latest.currency)} over {summary.points.length} sightings
+              {t('buy.range', {
+                low: price(summary.low, summary.latest.currency),
+                high: price(summary.high, summary.latest.currency),
+                count: summary.points.length,
+              })}
             </p>
           )}
           <p class="source">
-            Prices from <a href={`https://prices.openfoodfacts.org/products/${barcode}`} target="_blank" rel="noopener">Open Prices</a>, updated daily.
+            {t('buy.source.before')} <a href={`https://prices.openfoodfacts.org/products/${barcode}`} target="_blank" rel="noopener">Open Prices</a>{t('buy.source.after')}
           </p>
         </div>
       ) : (
         barcode && (
           <p class="source">
-            No prices tracked yet. <a href={`https://prices.openfoodfacts.org/products/${barcode}`} target="_blank" rel="noopener">Add one on Open Prices</a>.
+            {t('buy.none')} <a href={`https://prices.openfoodfacts.org/products/${barcode}`} target="_blank" rel="noopener">{t('buy.add')}</a>.
           </p>
         )
       )}
@@ -98,6 +114,18 @@ if (summary && summary.points.length > 1) {
   h3 { margin: 1rem 0 0.4rem; font-size: 1rem; }
   .stores { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
   .stores li { display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  .region {
+    margin-left: 0.4rem;
+    padding: 0 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    vertical-align: middle;
+  }
   .price { text-align: right; }
   small { display: block; color: var(--muted); font-size: 0.8rem; }
   .latest { margin: 0; }

@@ -1,28 +1,37 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Rating from '../../components/Rating.astro';
-import { formatDate, getChipsByDate } from '../../lib/chips';
-import { url } from '../../lib/url';
+import Base from '../../../layouts/Base.astro';
+import Rating from '../../../components/Rating.astro';
+import { langPaths, locales, useTranslations, type Lang } from '../../../i18n/ui';
+import { formatDate, getChipsByDate } from '../../../lib/chips';
+import { url } from '../../../lib/url';
 
-const chips = (await getChipsByDate()).sort(
-  (a, b) => b.data.rating - a.data.rating || a.data.name.localeCompare(b.data.name),
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const chips = (await getChipsByDate(lang)).sort(
+  (a, b) => b.data.rating - a.data.rating || a.data.name.localeCompare(b.data.name, locales[lang]),
 );
 ---
 
-<Base title="All reviews" description="Every chip we've tasted, best rated first.">
+<Base title={t('all.title')} description={t('all.description')}>
   <header>
-    <h1>All reviews</h1>
-    <p class="muted">Every chip we've tasted so far, {chips.length} in total, best rated first.</p>
+    <h1>{t('all.title')}</h1>
+    <p class="muted">{t('all.lede', { count: chips.length })}</p>
   </header>
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
-          <th>Chip</th>
-          <th>Flavour</th>
-          <th>Country</th>
-          <th>Reviewed</th>
-          <th class="num">Rating</th>
+          <th>{t('facts.chip')}</th>
+          <th>{t('facts.flavour')}</th>
+          <th>{t('facts.country')}</th>
+          <th>{t('all.reviewed')}</th>
+          <th class="num">{t('all.rating')}</th>
         </tr>
       </thead>
       <tbody>
@@ -30,15 +39,15 @@ const chips = (await getChipsByDate()).sort(
           chips.map((chip) => (
             <tr>
               <td>
-                <a href={url(`chips/${chip.id}/`)}>
+                <a href={url(`chips/${chip.id}/`, lang)}>
                   {chip.data.brand} {chip.data.name}
                 </a>
               </td>
               <td>{chip.data.flavour}</td>
               <td>{chip.data.country}</td>
-              <td class="muted">{formatDate(chip.data.reviewed)}</td>
+              <td class="muted">{formatDate(chip.data.reviewed, lang)}</td>
               <td class="num">
-                <Rating rating={chip.data.rating} />
+                <Rating rating={chip.data.rating} lang={lang} />
               </td>
             </tr>
           ))

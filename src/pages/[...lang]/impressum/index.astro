@@ -1,0 +1,98 @@
+---
+import LegalField from '../../../components/LegalField.astro';
+import LegalPage from '../../../components/LegalPage.astro';
+import { langPaths, type Lang } from '../../../i18n/ui';
+import { legal } from '../../../lib/legal';
+
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+{
+  lang === 'de' ? (
+    <LegalPage lang={lang} title="Impressum">
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <address>
+        <LegalField value={legal.name} placeholder="Vorname Nachname" />
+        <br />
+        <LegalField value={legal.street} placeholder="Straße Hausnummer" />
+        <br />
+        <LegalField value={legal.city} placeholder="PLZ Ort" />
+        <br />
+        {legal.country}
+      </address>
+
+      <h2>Kontakt</h2>
+      <p>
+        E-Mail: <LegalField value={legal.email} placeholder="E-Mail-Adresse" />
+        {legal.phone && (
+          <>
+            <br />
+            Telefon: {legal.phone}
+          </>
+        )}
+      </p>
+
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>
+        <LegalField value={legal.name} placeholder="Vorname Nachname" />, Anschrift wie oben.
+      </p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Diese Seite verlinkt auf Websites Dritter, etwa Online-Shops. Für deren Inhalte sind ausschließlich die jeweiligen
+        Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Werden mir solche
+        bekannt, entferne ich den Link umgehend.
+      </p>
+
+      <h2>Werbung</h2>
+      <p>
+        Die Tests sind unabhängig und unbezahlt. Die Shop-Links sind keine Affiliate-Links, ich verdiene nichts an
+        Käufen.
+      </p>
+    </LegalPage>
+  ) : (
+    <LegalPage lang={lang} title="Imprint">
+      <h2>Information under § 5 DDG (German Digital Services Act)</h2>
+      <address>
+        <LegalField value={legal.name} placeholder="First and last name" />
+        <br />
+        <LegalField value={legal.street} placeholder="Street and number" />
+        <br />
+        <LegalField value={legal.city} placeholder="Postcode and town" />
+        <br />
+        {legal.country === 'Deutschland' ? 'Germany' : legal.country}
+      </address>
+
+      <h2>Contact</h2>
+      <p>
+        Email: <LegalField value={legal.email} placeholder="Email address" />
+        {legal.phone && (
+          <>
+            <br />
+            Phone: {legal.phone}
+          </>
+        )}
+      </p>
+
+      <h2>Responsible for the content under § 18 (2) MStV</h2>
+      <p>
+        <LegalField value={legal.name} placeholder="First and last name" />, address as above.
+      </p>
+
+      <h2>Links to other sites</h2>
+      <p>
+        This site links to other websites, such as online shops. Their owners alone are responsible for their content. No
+        legal issues were apparent when the links were added. If I learn of any, I will remove the link straight away.
+      </p>
+
+      <h2>Advertising</h2>
+      <p>The reviews are independent and unpaid. The shop links are not affiliate links; I earn nothing from purchases.</p>
+    </LegalPage>
+  )
+}

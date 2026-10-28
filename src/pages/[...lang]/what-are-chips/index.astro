@@ -1,0 +1,334 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { langPaths, type Lang } from '../../../i18n/ui';
+import { url } from '../../../lib/url';
+
+export const getStaticPaths = langPaths;
+
+interface Props {
+  lang: Lang;
+}
+
+const en = {
+  title: 'What are chips?',
+  description:
+    'A short guide to chips and crisps: what goes in them, the main flavour profiles, a little history and some fun facts.',
+  eyebrow: 'The chip primer',
+  lede: "A chip, or crisp if you're in Britain or Ireland, is a thin slice of potato fried or baked until it's dry enough to snap, then seasoned. That's it. Everything else is the fun part.",
+  onThisPage: 'On this page',
+  toc: { ingredients: 'Ingredients', flavours: 'Flavour profiles', history: 'History', glossary: 'Know your chip', funFacts: 'Fun facts' },
+  headings: {
+    ingredients: 'What goes in the bag',
+    flavours: 'Flavour profiles',
+    flavoursNote: 'Almost every flavour on the shelf leans on one or two of these.',
+    history: 'A short history',
+    glossary: 'Know your chip',
+    funFacts: 'Fun facts',
+  },
+  next: 'Now go see how they taste: all reviews →',
+  ingredients: [
+    {
+      name: 'Potatoes',
+      text: 'Chipping varieties such as Lady Rosetta and Atlantic are bred for lots of starch and very little sugar. Sugar browns fast in hot oil, so a sweet potato would burn before it got crisp.',
+    },
+    {
+      name: 'Oil',
+      text: 'Usually sunflower, rapeseed or palm oil. A freshly fried chip is roughly a third fat by weight, which is where most of the crunch and the richness come from.',
+    },
+    {
+      name: 'Salt',
+      text: 'The original seasoning and still the most popular. It goes on straight out of the fryer while the surface is still slightly oily, so it sticks.',
+    },
+    {
+      name: 'Seasoning',
+      text: 'Flavoured chips are tumbled in a powder built on a carrier like maltodextrin or whey, plus the flavour itself: cheese powder, vinegar powder, spices, yeast extract or MSG for savoury depth, and citric acid for tang.',
+    },
+  ],
+
+  profiles: [
+    { emoji: '🧂', name: 'Salty', text: 'Plain ready salted or sea salt. The baseline that lets the potato taste like potato.' },
+    { emoji: '🍋', name: 'Sour', text: 'Salt and vinegar is the classic. The sharpness comes from vinegar powder or sodium diacetate and makes your mouth water.' },
+    { emoji: '🧀', name: 'Savoury', text: 'Cheese and onion, sour cream, and anything heavy on umami. Rich, round, and hard to stop eating.' },
+    { emoji: '🔥', name: 'Smoky and sweet', text: 'Barbecue, paprika and smoked bacon lean on sugar, smoked spices and tomato for a sticky, campfire feel.' },
+    { emoji: '🌶️', name: 'Hot', text: 'Chilli, jalapeño, sriracha and the rest. Heat that builds bag by bag rather than bite by bite.' },
+    { emoji: '🌍', name: 'Regional', text: 'Nori seaweed and butter in Japan, prawn cocktail in Britain, jamón in Spain. Local tastes, one chip at a time.' },
+  ],
+
+  history: [
+    {
+      year: '1817',
+      text: 'William Kitchiner\'s English cookbook The Cook\'s Oracle prints a recipe for "potatoes fried in slices or shavings". The earliest known written chip recipe.',
+    },
+    {
+      year: '1853',
+      text: 'The popular legend: chef George Crum at a Saratoga Springs resort slices potatoes paper thin to annoy a fussy diner, who loves them. Historians doubt the details, but "Saratoga chips" did become famous.',
+    },
+    {
+      year: '1920s',
+      text: 'Chips go from restaurant side dish to packaged snack. Laura Scudder in California seals them in waxed paper bags, keeping them fresh and crunchy for much longer.',
+    },
+    {
+      year: '1954',
+      text: 'Joe "Spud" Murphy of Tayto in Ireland works out how to season chips during production and launches cheese and onion, the first mass-produced flavoured crisp.',
+    },
+    {
+      year: '1968',
+      text: 'Pringles arrive: dried potato formed into identical saddle shapes and stacked in a tube. Chips no longer have to be slices of a real potato.',
+    },
+    {
+      year: 'Today',
+      text: 'Kettle-cooked, baked, vegetable, lentil and hundreds of regional flavours. Chips are one of the best-selling snacks on the planet.',
+    },
+  ],
+
+  glossary: [
+    { term: 'Chip or crisp?', text: 'Same thing. Americans say chips, Britons and Irish say crisps, and in Britain "chips" means fries.' },
+    { term: 'Kettle cooked', text: 'Fried in small batches. Adding cold potatoes drops the oil temperature, giving a thicker, harder, more uneven crunch.' },
+    { term: 'Ridged or crinkle cut', text: 'Sliced with a wavy blade. The grooves hold more seasoning and make the chip sturdy enough for dips.' },
+    { term: 'Stacked', text: 'Made from a dough of dried potato and pressed into a uniform shape, like Pringles.' },
+    { term: 'Baked', text: 'Cooked in an oven instead of a fryer. Less fat, a lighter and drier snap.' },
+    { term: 'Extruded', text: 'Corn or potato dough pushed through a shaped nozzle and puffed, like cheese puffs and ring snacks.' },
+  ],
+
+  funFacts: [
+    'Fredric Baur, the chemist who designed the Pringles tube, asked for some of his ashes to be buried in one. His family did exactly that in 2008.',
+    'In the US, 14 March is National Potato Chip Day.',
+    'It takes about four kilograms of raw potato to make one kilogram of chips, because most of a potato is water that boils away in the fryer.',
+    'The rattle is part of the taste. In an Oxford experiment that later won an Ig Nobel Prize, people rated the same Pringles as fresher and crunchier when the sound of the bite was played back louder through their headphones.',
+  ],
+};
+
+const de: typeof en = {
+  title: 'Was sind Chips?',
+  description:
+    'Eine kleine Chips-Kunde: was drin steckt, die wichtigsten Geschmacksrichtungen, ein bisschen Geschichte und ein paar Fun Facts.',
+  eyebrow: 'Die Chips-Fibel',
+  lede: 'Ein Chip, in Großbritannien und Irland „Crisp“ genannt, ist eine dünne Kartoffelscheibe, die frittiert oder gebacken wird, bis sie trocken genug zum Knacken ist, und dann gewürzt. Das ist alles. Der Rest ist der spaßige Teil.',
+  onThisPage: 'Auf dieser Seite',
+  toc: { ingredients: 'Zutaten', flavours: 'Geschmacksrichtungen', history: 'Geschichte', glossary: 'Chips-Lexikon', funFacts: 'Fun Facts' },
+  headings: {
+    ingredients: 'Was in der Tüte steckt',
+    flavours: 'Geschmacksrichtungen',
+    flavoursNote: 'Fast jede Sorte im Regal setzt auf eine oder zwei davon.',
+    history: 'Eine kurze Geschichte',
+    glossary: 'Chips-Lexikon',
+    funFacts: 'Fun Facts',
+  },
+  next: 'Jetzt ab zum Probieren: alle Tests →',
+  ingredients: [
+    {
+      name: 'Kartoffeln',
+      text: 'Chips-Sorten wie Lady Rosetta und Atlantic sind auf viel Stärke und sehr wenig Zucker gezüchtet. Zucker bräunt im heißen Öl schnell, eine süße Kartoffel würde also verbrennen, bevor sie knusprig wird.',
+    },
+    {
+      name: 'Öl',
+      text: 'Meist Sonnenblumen-, Raps- oder Palmöl. Ein frisch frittierter Chip besteht zu etwa einem Drittel aus Fett, und genau daher kommen der Großteil des Knusperns und der Geschmack.',
+    },
+    {
+      name: 'Salz',
+      text: 'Die ursprüngliche Würzung und bis heute die beliebteste. Es kommt direkt nach der Fritteuse drauf, solange die Oberfläche noch leicht ölig ist, damit es haften bleibt.',
+    },
+    {
+      name: 'Würzung',
+      text: 'Chips mit Geschmack werden in einem Pulver gewendet, das auf einem Trägerstoff wie Maltodextrin oder Molke aufbaut, plus dem eigentlichen Aroma: Käsepulver, Essigpulver, Gewürze, Hefeextrakt oder Glutamat für herzhafte Tiefe und Zitronensäure für die Säure.',
+    },
+  ],
+  profiles: [
+    { emoji: '🧂', name: 'Salzig', text: 'Klassisch gesalzen oder mit Meersalz. Die Basis, bei der die Kartoffel nach Kartoffel schmecken darf.' },
+    { emoji: '🍋', name: 'Sauer', text: 'Salt & Vinegar ist der Klassiker. Die Schärfe kommt von Essigpulver oder Natriumdiacetat und lässt einem das Wasser im Mund zusammenlaufen.' },
+    { emoji: '🧀', name: 'Herzhaft', text: 'Cheese & Onion, Sour Cream und alles mit viel Umami. Voll, rund und schwer, damit aufzuhören.' },
+    { emoji: '🔥', name: 'Rauchig und süß', text: 'Barbecue, Paprika und Bacon setzen auf Zucker, geräucherte Gewürze und Tomate für ein klebriges Lagerfeuer-Gefühl.' },
+    { emoji: '🌶️', name: 'Scharf', text: 'Chili, Jalapeño, Sriracha und Co. Eine Schärfe, die sich Tüte für Tüte aufbaut statt Biss für Biss.' },
+    { emoji: '🌍', name: 'Regional', text: 'Nori-Algen und Butter in Japan, Prawn Cocktail in Großbritannien, Jamón in Spanien und Paprika in Deutschland. Lokaler Geschmack, ein Chip nach dem anderen.' },
+  ],
+  history: [
+    {
+      year: '1817',
+      text: 'William Kitchiners englisches Kochbuch „The Cook’s Oracle“ druckt ein Rezept für „in Scheiben oder Späne frittierte Kartoffeln“. Das älteste bekannte schriftliche Chips-Rezept.',
+    },
+    {
+      year: '1853',
+      text: 'Die beliebte Legende: Koch George Crum in einem Hotel in Saratoga Springs schneidet Kartoffeln hauchdünn, um einen mäkeligen Gast zu ärgern, und der ist begeistert. Historiker bezweifeln die Details, aber „Saratoga Chips“ wurden tatsächlich berühmt.',
+    },
+    {
+      year: '1920er',
+      text: 'Chips werden von der Restaurant-Beilage zum verpackten Snack. Laura Scudder in Kalifornien verschließt sie in Wachspapiertüten, wodurch sie viel länger frisch und knusprig bleiben.',
+    },
+    {
+      year: '1954',
+      text: 'Joe „Spud“ Murphy von Tayto in Irland findet heraus, wie man Chips schon bei der Herstellung würzt, und bringt Cheese & Onion heraus, die ersten in Masse produzierten Chips mit Geschmack.',
+    },
+    {
+      year: '1968',
+      text: 'Pringles kommen: getrocknete Kartoffel, zu identischen Sattelformen gepresst und in einer Röhre gestapelt. Chips müssen keine Scheiben einer echten Kartoffel mehr sein.',
+    },
+    {
+      year: 'Heute',
+      text: 'Kesselchips, gebackene Chips, Gemüse- und Linsenchips und Hunderte regionale Sorten. Chips gehören zu den meistverkauften Snacks der Welt.',
+    },
+  ],
+  glossary: [
+    { term: 'Chip oder Crisp?', text: 'Dasselbe. In den USA sagt man Chips, in Großbritannien und Irland Crisps, und dort sind „Chips“ Pommes.' },
+    { term: 'Kettle Cooked', text: 'In kleinen Chargen frittiert. Die kalten Kartoffeln senken die Öltemperatur, was einen dickeren, härteren und unregelmäßigeren Biss ergibt.' },
+    { term: 'Geriffelt', text: 'Mit einer gewellten Klinge geschnitten. Die Rillen halten mehr Würzung und machen den Chip stabil genug für Dips.' },
+    { term: 'Stapelchips', text: 'Aus einem Teig aus getrockneter Kartoffel in eine einheitliche Form gepresst, wie Pringles.' },
+    { term: 'Gebacken', text: 'Im Ofen statt in der Fritteuse gegart. Weniger Fett, ein leichterer und trockenerer Knack.' },
+    { term: 'Extrudiert', text: 'Mais- oder Kartoffelteig, der durch eine geformte Düse gepresst und aufgepufft wird, wie Erdnussflips und Ringe.' },
+  ],
+  funFacts: [
+    'Fredric Baur, der Chemiker, der die Pringles-Röhre entworfen hat, wollte, dass ein Teil seiner Asche in einer beigesetzt wird. Seine Familie tat 2008 genau das.',
+    'In den USA ist der 14. März der National Potato Chip Day.',
+    'Für ein Kilogramm Chips braucht man etwa vier Kilogramm rohe Kartoffeln, denn der Großteil einer Kartoffel ist Wasser, das in der Fritteuse verdampft.',
+    'Das Knistern gehört zum Geschmack. In einem Experiment in Oxford, das später einen Ig-Nobelpreis gewann, fanden Leute dieselben Pringles frischer und knuspriger, wenn das Geräusch ihres Bisses lauter über Kopfhörer abgespielt wurde.',
+  ],
+};
+
+const { lang } = Astro.props;
+const c = { en, de }[lang];
+const { ingredients, profiles, history, glossary, funFacts } = c;
+---
+
+<Base title={c.title} description={c.description}>
+  <header class="intro">
+    <p class="eyebrow">{c.eyebrow}</p>
+    <h1>{c.title}</h1>
+    <p class="lede">{c.lede}</p>
+    <nav class="toc" aria-label={c.onThisPage}>
+      <a href="#ingredients">{c.toc.ingredients}</a>
+      <a href="#flavours">{c.toc.flavours}</a>
+      <a href="#history">{c.toc.history}</a>
+      <a href="#glossary">{c.toc.glossary}</a>
+      <a href="#fun-facts">{c.toc.funFacts}</a>
+    </nav>
+  </header>
+
+  <section id="ingredients">
+    <h2 class="section-title">{c.headings.ingredients}</h2>
+    <div class="grid two">
+      {
+        ingredients.map((item) => (
+          <article class="card">
+            <h3>{item.name}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="flavours">
+    <h2 class="section-title">{c.headings.flavours}</h2>
+    <p class="muted">{c.headings.flavoursNote}</p>
+    <div class="grid three">
+      {
+        profiles.map((p) => (
+          <article class="card">
+            <h3><span aria-hidden="true">{p.emoji}</span> {p.name}</h3>
+            <p>{p.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="history">
+    <h2 class="section-title">{c.headings.history}</h2>
+    <ol class="timeline">
+      {
+        history.map((h) => (
+          <li>
+            <span class="year">{h.year}</span>
+            <p>{h.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section id="glossary">
+    <h2 class="section-title">{c.headings.glossary}</h2>
+    <dl class="glossary">
+      {
+        glossary.map((g) => (
+          <div>
+            <dt>{g.term}</dt>
+            <dd>{g.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section id="fun-facts">
+    <h2 class="section-title">{c.headings.funFacts}</h2>
+    <ul class="facts">
+      {funFacts.map((fact) => <li>{fact}</li>)}
+    </ul>
+  </section>
+
+  <p class="next"><a href={url('chips/', lang)}>{c.next}</a></p>
+</Base>
+
+<style>
+  .intro { text-align: center; max-width: 42rem; margin: 0 auto; }
+  .eyebrow { margin: 0 0 0.5rem; font-family: var(--serif); font-style: italic; color: var(--muted); }
+  h1 { margin: 0 0 1rem; font-size: clamp(2rem, 5vw, 3rem); }
+  .lede { font-size: 1.15rem; margin: 0 0 1.5rem; }
+  .toc { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+  .toc a {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .toc a:hover { border-color: var(--accent); }
+
+  section { scroll-margin-top: 1rem; }
+  .grid { display: grid; gap: 1rem; margin-top: 1rem; }
+  .grid.two { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
+  .grid.three { grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+  .card {
+    padding: 1.25rem 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .card h3 { margin: 0 0 0.5rem; font-size: 1.2rem; }
+  .card p { margin: 0; }
+
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 1.25rem; border-left: 2px dotted var(--border); }
+  .timeline li { position: relative; padding: 0 0 1.5rem 1rem; }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -1.25rem;
+    top: 0.45rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-left: -0.4rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .year { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; color: var(--accent-text); }
+  .timeline p { margin: 0.25rem 0 0; }
+
+  .glossary { display: grid; gap: 1rem; margin: 0; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+  .glossary div { padding: 1rem 1.25rem; border: 1px dashed var(--border); border-radius: var(--radius); }
+  .glossary dt { font-weight: 700; }
+  .glossary dd { margin: 0.25rem 0 0; }
+
+  .facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 1rem; }
+  .facts li {
+    padding: 1rem 1.25rem 1rem 3.25rem;
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .facts li::before { content: '🥔'; position: absolute; left: 1.1rem; top: 0.95rem; }
+
+  .next { margin-top: 3rem; text-align: center; font-weight: 700; }
+</style>

@@ -1,0 +1,15 @@
+---
+// A detail from src/lib/legal.ts, or a highlighted placeholder while it is empty.
+interface Props {
+  value: string;
+  placeholder: string;
+}
+
+const { value, placeholder } = Astro.props;
+---
+
+{value.trim() !== '' ? value : <mark>[{placeholder}]</mark>}
+
+<style>
+  mark { padding: 0 0.2rem; border-radius: 3px; background: #ffe27a; color: #2e2117; }
+</style>

@@ -32,6 +32,10 @@ const chips = defineCollection({
           price: z.number().positive().optional(),
           currency: z.string().length(3).default('EUR'),
           checked: z.coerce.date().optional(),
+          // Optional ISO country code of a store that only sells there (e.g.
+          // DE, GB, US), shown next to its name. Leave out for shops that
+          // ship EU-wide.
+          country: z.string().length(2).toUpperCase().optional(),
         }),
       )
       .default([]),
@@ -49,7 +53,41 @@ const chips = defineCollection({
         verified: z.boolean().default(false),
       })
       .optional(),
+    // Optional nutrition declaration per 100 g, in the order EU labels print
+    // it (Regulation (EU) No 1169/2011). Values in grams, energy in kJ and kcal.
+    nutrition: z
+      .object({
+        energyKj: z.number().nonnegative(),
+        energyKcal: z.number().nonnegative(),
+        fat: z.number().nonnegative(),
+        saturates: z.number().nonnegative(),
+        carbohydrate: z.number().nonnegative(),
+        sugars: z.number().nonnegative(),
+        fibre: z.number().nonnegative().optional(),
+        protein: z.number().nonnegative(),
+        salt: z.number().nonnegative(),
+      })
+      .optional(),
   }),
 });
 
-export const collections = { chips };
+// German translations: a Markdown file in src/content/chips-de/ with the same
+// file name as the English chip. The facts (rating, stores, barcode, ...) stay
+// in the English file; this one only holds text. Every field is optional and
+// falls back to English, and the Markdown body is the German review.
+const chipsDe = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/chips-de' }),
+  schema: z.object({
+    title: z.string().optional(),
+    excerpt: z.string().optional(),
+    flavour: z.string().optional(),
+    country: z.string().optional(),
+    // The ingredient list in German, one entry per ingredient. Set
+    // `ingredientsTranslated: true` when you translated it yourself rather
+    // than copying it from a German pack.
+    ingredients: z.array(z.string()).min(1).optional(),
+    ingredientsTranslated: z.boolean().default(false),
+  }),
+});
+
+export const collections = { chips, chipsDe };

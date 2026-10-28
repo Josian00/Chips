@@ -1,0 +1,40 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ChipCard from '../../../components/ChipCard.astro';
+import Comments from '../../../components/Comments.astro';
+import Post from '../../../components/Post.astro';
+import { langParams, langs, useTranslations } from '../../../i18n/ui';
+import { excerpt, getChipsByDate, postTitle, suggestions, type LocalChip } from '../../../lib/chips';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langs) {
+    const chips = await getChipsByDate(lang);
+    for (const chip of chips) {
+      paths.push({ params: { ...langParams(lang), id: chip.id }, props: { chip, related: suggestions(chips, chip) } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  chip: LocalChip;
+  related: LocalChip[];
+}
+
+const { chip, related } = Astro.props;
+const t = useTranslations(chip.lang);
+---
+
+<Base title={postTitle(chip)} description={excerpt(chip)}>
+  <Post chip={chip} />
+  {
+    related.length > 0 && (
+      <section>
+        <h2 class="section-title">{t('post.related')}</h2>
+        <div class="card-grid">{related.map((other) => <ChipCard chip={other} />)}</div>
+      </section>
+    )
+  }
+  <Comments term={`chips/${chip.id}`} lang={chip.lang} />
+</Base>

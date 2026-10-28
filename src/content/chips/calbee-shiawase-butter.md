@@ -7,8 +7,11 @@ country: Japan
 rating: 9
 reviewed: 2026-10-19
 stores:
-  - name: "Amazon"
+  - name: "Amazon.de"
+    url: "https://www.amazon.de/s?k=calbee+shiawase+butter"
+  - name: "Amazon.com"
     url: "https://www.amazon.com/s?k=calbee+shiawase+butter"
+    country: US
 ingredients:
   list:
     - Potato (non-GMO)

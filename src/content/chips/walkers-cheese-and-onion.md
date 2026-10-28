@@ -7,10 +7,14 @@ country: United Kingdom
 rating: 8
 reviewed: 2026-10-12
 stores:
+  - name: "Amazon.de"
+    url: "https://www.amazon.de/s?k=walkers+cheese+and+onion"
   - name: "Tesco"
     url: "https://www.tesco.com/groceries/en-GB/search?query=walkers%20cheese%20and%20onion"
+    country: GB
   - name: "Sainsbury's"
     url: "https://www.sainsburys.co.uk/gol-ui/SearchResults/walkers%20cheese%20and%20onion"
+    country: GB
 ingredients:
   list:
     - Potatoes
