@@ -5,6 +5,7 @@ import type { LocalChip } from '../lib/chips';
 import { formatDate, postTitle, readingMinutes } from '../lib/chips';
 import { url } from '../lib/url';
 import ChipPhoto from './ChipPhoto.astro';
+import DietTag from './DietTag.astro';
 import FactBox from './FactBox.astro';
 import Ingredients from './Ingredients.astro';
 import Rating from './Rating.astro';
@@ -34,6 +35,7 @@ const href = url(`chips/${chip.id}/`, lang);
       <span aria-hidden="true">·</span>
       <span>{t('post.minRead', { minutes: readingMinutes(chip) })}</span>
       <Rating rating={rating} lang={lang} />
+      <DietTag diet={chip.diet} lang={lang} href={url('chips/', lang)} />
     </p>
   </header>
   <ChipPhoto chip={chip} size="hero" />

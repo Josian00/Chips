@@ -49,6 +49,11 @@ ingredients:              # optional "Ingredients" box under the review
     url: https://www.tesco.com/groceries/en-GB/search?query=pringles%20original
   checked: 2026-10-19
   verified: true          # set once you've checked it against the bag
+diet:                     # optional, only what the pack itself says
+  vegetarian: true        # e.g. a "Suitable for vegetarians" logo
+  vegan: false
+  source:
+    name: Pack label
 nutrition:                # optional, per 100 g as on EU labels
   energyKj: 2252
   energyKcal: 540
@@ -96,6 +101,14 @@ The facts (rating, stores, barcode, allergens, nutrition) stay in the English fi
 A chip with `ingredients` gets an "Ingredients" box under its review. Allergens named in `contains` are highlighted in the list (for Milk, words like whey, cheese and butter are highlighted too; see `src/lib/ingredients.ts`). Until `verified: true` is set, the box says the list hasn't been checked against the bag yet, and it always tells readers with allergies to read the pack.
 
 `contains` and `mayContain` take the 14 EU allergens (plus Wheat) in English or German, e.g. `Milk` or `Milch`, and show them in the page's language. German lists are highlighted too, including inside compound words like *Magermilchpulver*. With `nutrition`, a "Nutrition per 100 g" table is shown in the order EU labels use.
+
+## Vegetarian and vegan tags
+
+Each chip shows whether it is vegetarian and vegan (Yes, No or Unclear) in its fact box, with the reason, and gets a green **Vegan** or **Vegetarian** tag on its page, its cards and the "All reviews" table. That table can be filtered with the buttons above it (or `/chips/?diet=vegan`); chips whose status is unclear are left out of a filter.
+
+The status is worked out from the English `ingredients` list in `src/lib/diet.ts`. Meat, fish, gelatine or carmine make a chip not vegetarian; milk, egg or honey make it not vegan. Anything that could go either way is shown as Unclear rather than guessed: cheese and whey (they may be made with animal rennet), flavourings, and additives such as E471 or E631 that can come from animals. A chip without an ingredient list is Unclear too. `mayContain` warnings don't count.
+
+When the pack settles it, for example with a "Suitable for vegetarians" or vegan logo, add a `diet` block with `vegetarian` and/or `vegan`. `vegan: true` implies vegetarian. The build fails if the block says `true` but the ingredients clearly say no (e.g. `vegan: true` with milk in the list), since one of the two must be wrong.
 
 ## Prices and store links
 
@@ -153,6 +166,7 @@ Only visits on `josian00.github.io` are counted, so local `npm run dev` sessions
 | `src/pages/[...lang]/impressum/`, `datenschutz/` | Legal pages, filled from `src/lib/legal.ts` |
 | `src/components/` | Post, card, photo, fact box, rating and comments pieces |
 | `src/lib/chips.ts` | Sorting, excerpts and suggestion logic |
+| `src/lib/diet.ts` | Vegetarian and vegan status from the ingredients |
 | `src/lib/analytics.ts`, `src/components/Analytics.astro` | Umami analytics setup and outbound link tracking |
 | `src/lib/prices.ts`, `src/data/prices.json` | Tracked price history and formatting |
 | `scripts/update-prices.mjs` | Fetches prices from Open Prices |

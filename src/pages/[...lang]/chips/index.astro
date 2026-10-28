@@ -1,5 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
+import DietTag from '../../../components/DietTag.astro';
 import Rating from '../../../components/Rating.astro';
 import { langPaths, locales, useTranslations, type Lang } from '../../../i18n/ui';
 import { formatDate, getChipsByDate } from '../../../lib/chips';
@@ -23,6 +24,13 @@ const chips = (await getChipsByDate(lang)).sort(
     <h1>{t('all.title')}</h1>
     <p class="muted">{t('all.lede', { count: chips.length })}</p>
   </header>
+  <nav class="filter" aria-label={t('diet.filter')} hidden>
+    <span class="muted">{t('diet.filter')}:</span>
+    <a href="./" data-diet="">{t('diet.all')}</a>
+    <a href="?diet=vegetarian" data-diet="vegetarian">{t('diet.vegetarian')}</a>
+    <a href="?diet=vegan" data-diet="vegan">{t('diet.vegan')}</a>
+  </nav>
+  <p class="muted filter-note" hidden>{t('diet.filterNote')}</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -31,13 +39,14 @@ const chips = (await getChipsByDate(lang)).sort(
           <th>{t('facts.flavour')}</th>
           <th>{t('facts.country')}</th>
           <th>{t('all.reviewed')}</th>
+          <th>{t('all.diet')}</th>
           <th class="num">{t('all.rating')}</th>
         </tr>
       </thead>
       <tbody>
         {
           chips.map((chip) => (
-            <tr>
+            <tr data-vegetarian={chip.diet.vegetarian} data-vegan={chip.diet.vegan}>
               <td>
                 <a href={url(`chips/${chip.id}/`, lang)}>
                   {chip.data.brand} {chip.data.name}
@@ -46,16 +55,42 @@ const chips = (await getChipsByDate(lang)).sort(
               <td>{chip.data.flavour}</td>
               <td>{chip.data.country}</td>
               <td class="muted">{formatDate(chip.data.reviewed, lang)}</td>
+              <td>
+                <DietTag diet={chip.diet} lang={lang} />
+              </td>
               <td class="num">
                 <Rating rating={chip.data.rating} lang={lang} />
               </td>
             </tr>
           ))
         }
+        <tr class="empty" hidden>
+          <td colspan="6" class="muted">{t('diet.empty')}</td>
+        </tr>
       </tbody>
     </table>
   </div>
 </Base>
+
+<script>
+  // ?diet=vegetarian or ?diet=vegan keeps only the rows whose status is
+  // "yes"; vegan chips count as vegetarian too.
+  const diet = new URLSearchParams(location.search).get('diet');
+  const filter = diet === 'vegan' || diet === 'vegetarian' ? diet : '';
+  document.querySelector<HTMLElement>('.filter')!.hidden = false;
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('.filter a')) {
+    if (link.dataset.diet === filter) link.setAttribute('aria-current', 'page');
+  }
+  if (filter) {
+    let shown = 0;
+    for (const row of document.querySelectorAll<HTMLElement>('tbody tr[data-vegan]')) {
+      row.hidden = row.dataset[filter] !== 'yes';
+      if (!row.hidden) shown++;
+    }
+    document.querySelector<HTMLElement>('tr.empty')!.hidden = shown > 0;
+    document.querySelector<HTMLElement>('.filter-note')!.hidden = false;
+  }
+</script>
 
 <style>
   header { text-align: center; margin-bottom: 2rem; }
@@ -78,4 +113,18 @@ const chips = (await getChipsByDate(lang)).sort(
   td a { font-weight: 700; text-decoration: none; }
   td a:hover { text-decoration: underline; }
   .num { text-align: right; }
+  .filter { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; margin-bottom: 1rem; }
+  .filter[hidden], .filter-note[hidden], tr[hidden] { display: none; }
+  .filter a {
+    padding: 0.25rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: inherit;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .filter a:hover { border-color: var(--green); }
+  .filter a[aria-current] { background: var(--green); border-color: var(--green); color: var(--bg); }
+  .filter-note { text-align: center; margin: -0.25rem 0 1rem; font-size: 0.9rem; }
 </style>
