@@ -1,0 +1,35 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+import { dietTag, type Diet } from '../lib/diet';
+
+interface Props {
+  diet: Diet;
+  lang: Lang;
+  // Links the tag to the list of all chips with that tag.
+  href?: string;
+}
+
+const { diet, lang, href } = Astro.props;
+const tag = dietTag(diet);
+const t = useTranslations(lang);
+const Element = href ? 'a' : 'span';
+---
+
+{tag && <Element class="diet-tag" href={href ? `${href}?diet=${tag}` : undefined}>{t(`diet.${tag}`)}</Element>}
+
+<style>
+  .diet-tag {
+    display: inline-block;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    color: var(--green);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: none;
+    white-space: nowrap;
+  }
+  a.diet-tag:hover { background: var(--green); color: var(--bg); }
+</style>

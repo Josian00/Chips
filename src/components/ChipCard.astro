@@ -3,6 +3,7 @@ import type { LocalChip } from '../lib/chips';
 import { excerpt, formatDate, postTitle } from '../lib/chips';
 import { url } from '../lib/url';
 import ChipPhoto from './ChipPhoto.astro';
+import DietTag from './DietTag.astro';
 import Rating from './Rating.astro';
 
 interface Props {
@@ -20,7 +21,10 @@ const { lang } = chip;
     <div class="body">
       <p class="meta">
         <span>{country}</span>
-        <Rating rating={rating} lang={lang} />
+        <span class="badges">
+          <DietTag diet={chip.diet} lang={lang} />
+          <Rating rating={rating} lang={lang} />
+        </span>
       </p>
       <h3 lang={chip.translated ? undefined : 'en'}>{postTitle(chip)}</h3>
       <p class="excerpt" lang={chip.translated ? undefined : 'en'}>{excerpt(chip)}</p>
@@ -43,6 +47,7 @@ const { lang } = chip;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
+  .badges { display: flex; gap: 0.4rem; align-items: center; }
   h3 { margin: 0 0 0.4rem; font-size: 1.35rem; line-height: 1.25; transition: color 0.15s; }
   .excerpt { margin: 0 0 0.5rem; color: var(--muted); }
   time { font-size: 0.85rem; color: var(--muted); }

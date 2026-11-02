@@ -1,15 +1,20 @@
 ---
 import { useTranslations } from '../i18n/ui';
 import type { LocalChip } from '../lib/chips';
+import type { Reason, Status } from '../lib/diet';
 import Rating from './Rating.astro';
 
 interface Props {
   chip: LocalChip;
 }
 
-const { lang, data } = Astro.props.chip;
+const { lang, data, diet } = Astro.props.chip;
 const { brand, name, flavour, country, rating } = data;
 const t = useTranslations(lang);
+const dietRows: { label: string; status: Status; reasons: Reason[] }[] = [
+  { label: t('diet.vegetarian'), status: diet.vegetarian, reasons: diet.vegetarianReasons },
+  { label: t('diet.vegan'), status: diet.vegan, reasons: diet.veganReasons },
+];
 ---
 
 <aside class="facts">
@@ -20,7 +25,37 @@ const t = useTranslations(lang);
     <dt>{t('facts.flavour')}</dt><dd>{flavour}</dd>
     <dt>{t('facts.country')}</dt><dd>{country}</dd>
     <dt>{t('facts.verdict')}</dt><dd><Rating rating={rating} lang={lang} /></dd>
+    {
+      dietRows.map((row) => (
+        <>
+          <dt>{row.label}</dt>
+          <dd>
+            <span class:list={['diet', row.status]}>{t(`diet.${row.status}`)}</span>
+            {row.reasons.length > 0 && <span class="why">{row.reasons.map((reason) => t(`diet.reason.${reason}`)).join('; ')}</span>}
+          </dd>
+        </>
+      ))
+    }
   </dl>
+  <p class="note">
+    {
+      diet.declared && diet.source ? (
+        <>
+          {t('diet.declaredFrom')}{' '}
+          {diet.source.url ? (
+            <a href={diet.source.url} target="_blank" rel="noopener nofollow">{diet.source.name}</a>
+          ) : (
+            diet.source.name
+          )}
+          .
+        </>
+      ) : diet.declared ? (
+        t('diet.declared')
+      ) : (
+        t('diet.derived')
+      )
+    }
+  </p>
 </aside>
 
 <style>
@@ -34,4 +69,8 @@ const t = useTranslations(lang);
   dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1.25rem; margin: 0; }
   dt { color: var(--muted); }
   dd { margin: 0; }
+  .diet { font-weight: 700; }
+  .diet.yes { color: var(--green); }
+  .why { display: block; color: var(--muted); font-size: 0.8rem; line-height: 1.35; }
+  .note { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.8rem; }
 </style>

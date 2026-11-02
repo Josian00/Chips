@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { defaultLang, locales, type Lang } from '../i18n/ui';
+import { chipDiet, type Diet } from './diet';
 
 export type Chip = CollectionEntry<'chips'>;
 
@@ -13,6 +14,8 @@ export interface LocalChip {
   entry: CollectionEntry<'chips' | 'chipsDe'>;
   translated: boolean;
   ingredientsTranslated: boolean;
+  // Vegetarian and vegan status, from the English ingredient list.
+  diet: Diet;
 }
 
 async function translations(lang: Lang) {
@@ -24,6 +27,12 @@ async function translations(lang: Lang) {
 export async function getChipsByDate(lang: Lang = defaultLang): Promise<LocalChip[]> {
   const chips = await getCollection('chips');
   const translated = new Map((await translations(lang)).map((entry) => [entry.id, entry]));
+  // The diet is checked against every language's ingredient list, so it is
+  // the same on every page.
+  const otherLists = new Map<string, string[][]>();
+  for (const entry of await getCollection('chipsDe')) {
+    if (entry.data.ingredients) otherLists.set(entry.id, [entry.data.ingredients]);
+  }
   for (const id of translated.keys()) {
     if (!chips.some((chip) => chip.id === id)) {
       throw new Error(`src/content/chips-${lang}/${id}.md has no matching src/content/chips/${id}.md`);
@@ -50,6 +59,7 @@ export async function getChipsByDate(lang: Lang = defaultLang): Promise<LocalChi
         entry: local ?? chip,
         translated: lang === defaultLang || local !== undefined,
         ingredientsTranslated: text?.ingredients !== undefined && text.ingredientsTranslated,
+        diet: chipDiet(chip, otherLists.get(chip.id)),
       };
     })
     .sort((a, b) => b.data.reviewed.valueOf() - a.data.reviewed.valueOf() || a.id.localeCompare(b.id));

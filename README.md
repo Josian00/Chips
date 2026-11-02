@@ -49,6 +49,7 @@ ingredients:              # optional "Ingredients" box under the review
     url: https://www.tesco.com/groceries/en-GB/search?query=pringles%20original
   checked: 2026-10-19
   verified: true          # set once you've checked it against the bag
+diet: vegetarian          # optional: vegan, vegetarian or not-vegetarian, set by hand
 nutrition:                # optional, per 100 g as on EU labels
   energyKj: 2252
   energyKcal: 540
@@ -96,6 +97,25 @@ The facts (rating, stores, barcode, allergens, nutrition) stay in the English fi
 A chip with `ingredients` gets an "Ingredients" box under its review. Allergens named in `contains` are highlighted in the list (for Milk, words like whey, cheese and butter are highlighted too; see `src/lib/ingredients.ts`). Until `verified: true` is set, the box says the list hasn't been checked against the bag yet, and it always tells readers with allergies to read the pack.
 
 `contains` and `mayContain` take the 14 EU allergens (plus Wheat) in English or German, e.g. `Milk` or `Milch`, and show them in the page's language. German lists are highlighted too, including inside compound words like *Magermilchpulver*. With `nutrition`, a "Nutrition per 100 g" table is shown in the order EU labels use.
+
+## Vegetarian and vegan tags
+
+Each chip shows whether it is vegetarian and vegan (Yes, No or Unclear) in its fact box, with the reason, and gets a green **Vegan** or **Vegetarian** tag on its page, its cards and the "All reviews" table. That table can be filtered with the buttons above it (or `/chips/?diet=vegan`); chips whose status is unclear are left out of a filter.
+
+**Setting it by hand.** Add `diet: vegan`, `diet: vegetarian` or `diet: not-vegetarian` to the chip's frontmatter, for example when the bag has a "Suitable for vegetarians" logo. That always wins. For more control use the long form, e.g. `diet: { vegetarian: true, vegan: false, source: { name: Pack label } }`; with a `source` the fact box names it. If the ingredients clearly disagree (say `diet: vegan` with milk in the list), the build prints a `[diet]` warning so you can check which one is wrong.
+
+**Working it out from the ingredients.** Without `diet`, `src/lib/diet.ts` reads the English list and the German one from `chips-de` if there is one. Meat, fish, gelatine or carmine make a chip not vegetarian; milk, egg or honey make it not vegan. Anything that could go either way is shown as Unclear rather than guessed: cheese and whey (they may be made with animal rennet, unless the list says microbial or vegetarian rennet), flavourings, and additives such as E471 or E631 that can come from animals. A chip without an ingredient list is Unclear too.
+
+The matching is forgiving about how a list is written:
+
+- Upper or lower case, accents (`Käse`, `crème`), plurals (`eggs`, `cheeses`) and British or American spelling (`flavour`, `flavor`).
+- E numbers in any form: `E471`, `E 471`, `E-471`, `INS 471`, `E471(i)`.
+- Abbreviations like `SMP` (skimmed milk powder), `WMP`, `WPC` and `nat. flav.`.
+- German, including compounds (`Magermilchpulver`, `Hähnchenfleisch`, `Molkenerzeugnis`), and common French, Dutch, Spanish and Italian words.
+- Plant names that contain an animal word don't count: cocoa butter, coconut milk, peanut butter, `Milchsäure` (lactic acid), and anything qualified as vegan, plant-based or dairy-free. A "may contain …" note copied into the list is ignored too.
+- Typos: a word one letter off a known one (`chese`, `flavourng`, `mlik`) can't be trusted either way, so the status becomes Unclear and the build prints a `[diet]` warning naming the word. Fix the spelling or set `diet` by hand.
+
+To teach it a new word, add it to `rules` in `src/lib/diet.ts`.
 
 ## Prices and store links
 
@@ -153,6 +173,7 @@ Only visits on `josian00.github.io` are counted, so local `npm run dev` sessions
 | `src/pages/[...lang]/impressum/`, `datenschutz/` | Legal pages, filled from `src/lib/legal.ts` |
 | `src/components/` | Post, card, photo, fact box, rating and comments pieces |
 | `src/lib/chips.ts` | Sorting, excerpts and suggestion logic |
+| `src/lib/diet.ts` | Vegetarian and vegan status from the ingredients |
 | `src/lib/analytics.ts`, `src/components/Analytics.astro` | Umami analytics setup and outbound link tracking |
 | `src/lib/prices.ts`, `src/data/prices.json` | Tracked price history and formatting |
 | `scripts/update-prices.mjs` | Fetches prices from Open Prices |
