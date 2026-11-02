@@ -53,16 +53,20 @@ const chips = defineCollection({
         verified: z.boolean().default(false),
       })
       .optional(),
-    // Optional vegetarian and vegan status as the pack states it (e.g. a
-    // "Suitable for vegetarians" logo). Without it, the status is worked out
-    // from `ingredients`, and anything unclear (cheese, whey, flavourings) is
-    // shown as unclear. A `true` that the ingredients contradict fails the build.
+    // Optional vegetarian and vegan status set by hand, e.g. from a "Suitable
+    // for vegetarians" logo: `vegan`, `vegetarian` or `not-vegetarian`, or the
+    // long form below. It always wins. Without it, the status is worked out
+    // from the ingredient lists (see src/lib/diet.ts), and anything unclear
+    // (cheese, whey, flavourings, a likely typo) is shown as unclear.
     diet: z
-      .object({
-        vegetarian: z.boolean().optional(),
-        vegan: z.boolean().optional(),
-        source: z.object({ name: z.string(), url: z.url().optional() }).optional(),
-      })
+      .union([
+        z.enum(['vegan', 'vegetarian', 'not-vegetarian']),
+        z.object({
+          vegetarian: z.boolean().optional(),
+          vegan: z.boolean().optional(),
+          source: z.object({ name: z.string(), url: z.url().optional() }).optional(),
+        }),
+      ])
       .optional(),
     // Optional nutrition declaration per 100 g, in the order EU labels print
     // it (Regulation (EU) No 1169/2011). Values in grams, energy in kJ and kcal.
