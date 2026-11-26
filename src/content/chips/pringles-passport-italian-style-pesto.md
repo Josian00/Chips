@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "Strong herbal notes"
 name: Passport Flavours Italian Style Pesto
 brand: Pringles
 flavour: Pesto
@@ -40,4 +40,6 @@ nutrition:
   salt: 0.6
 ---
 
-TODO: write your review here.
+The Pringles Passport Flavours Italian Style Pesto taste strongly of basil. Unfortunately, the cheese/Parmesan note I expected for a real pesto experience is missing. The herbal note also leans a bit towards acidity/vinegar.
+
+A disappointing take on the world-famous pesto flavour that could certainly have turned out better.

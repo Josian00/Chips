@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "A pleasant, unspectacular spook from the bag"
 name: Spooky! Snacks Original Taste
 brand: OK Snacks
 flavour: Salted
@@ -33,4 +33,6 @@ nutrition:
   salt: 2.9
 ---
 
-TODO: write your review here.
+The Spooky Snacks Original taste pleasantly salty with no other flavour notes. The chips have an airy, compact texture and a smooth surface.
+
+Unspectacular overall, but tasty, and a good pick for fans of salty chips made from potato granules.

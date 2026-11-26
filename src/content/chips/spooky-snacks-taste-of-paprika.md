@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "A surprisingly spooky treat"
 name: Spooky! Snacks Taste of Paprika
 brand: OK Snacks
 flavour: Paprika
@@ -39,4 +39,6 @@ nutrition:
   salt: 3.0
 ---
 
-TODO: write your review here.
+The Spooky Snacks Taste of Paprika taste surprisingly good, like ketchup with a slight hidden smoky note. The chips have an airy, compact texture and a smooth surface.
+
+A great snack for a Halloween party or for the kids' trick-or-treat bag. It's almost a shame they aren't around all year.
