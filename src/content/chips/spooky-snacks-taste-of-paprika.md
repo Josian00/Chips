@@ -4,7 +4,7 @@ name: Spooky! Snacks Taste of Paprika
 brand: OK Snacks
 flavour: Paprika
 country: Denmark
-rating: 0 # TODO: your rating
+rating: 7 # TODO: your rating
 image: images/spooky-snacks-paprika.jpg
 reviewed: 2026-11-26
 barcode: "5701397313449"

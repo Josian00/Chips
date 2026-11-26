@@ -4,7 +4,7 @@ name: Passport Flavours Italian Style Pesto
 brand: Pringles
 flavour: Pesto
 country: United States
-rating: 0 # TODO: your rating
+rating: 3 # TODO: your rating
 image: images/pringles-passport-italian-style-pesto.jpg
 reviewed: 2026-11-26
 stores:

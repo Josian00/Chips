@@ -4,7 +4,7 @@ name: Feuerdrachen Hot and Spicy
 brand: Bravo
 flavour: Chili
 country: Germany
-rating: 0 # TODO: your rating
+rating: 8 # TODO: your rating
 image: images/bravo-feuerdrachen-hot-and-spicy.jpg
 reviewed: 2026-11-26
 barcode: "21870583"

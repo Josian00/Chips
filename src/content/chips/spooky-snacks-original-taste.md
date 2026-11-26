@@ -4,7 +4,7 @@ name: Spooky! Snacks Original Taste
 brand: OK Snacks
 flavour: Salted
 country: Denmark
-rating: 0 # TODO: your rating
+rating: 5 # TODO: your rating
 image: images/spooky-snacks-original.jpg
 reviewed: 2026-11-26
 barcode: "5701397313432"

@@ -4,7 +4,7 @@ name: Mystery Flavour (Fallout 76)
 brand: Pringles
 flavour: Mystery
 country: United States
-rating: 0 # TODO: your rating
+rating: 5 # TODO: your rating
 image: images/pringles-mystery-flavour-fallout-76.jpg
 reviewed: 2026-11-26
 barcode: "5053990190034"
