@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "Knackig scharfe Drachen erfreuen jedermann"
 flavour: Chili
 country: Deutschland
 ingredients:
@@ -27,4 +27,6 @@ ingredients:
   - Aroma
 ---
 
-TODO: Hier deine Bewertung schreiben.
+Die Feuerdrachen erfreuen mit einer knusprigen Schale und luftigem Bauch. Hinzu kommt eine angenehme Schärfe aus Chili und Pfeffer mit leckerer Würze aus Paprika Knoblauch und Zwiebelaromen.
+
+Die Chips sind ein angenehmer Klassiker für die ganze Familie und passen super zu einem Film- und/oder Spieleabend.

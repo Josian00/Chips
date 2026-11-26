@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "tbd"
 name: Feuerdrachen Hot and Spicy
 brand: Bravo
 flavour: Chili
@@ -52,4 +52,3 @@ nutrition:
   salt: 3.2
 ---
 
-TODO: write your review here.

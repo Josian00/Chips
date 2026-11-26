@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "Starke Kräutertöne"
 flavour: Pesto
 country: USA
 ingredients:
@@ -15,4 +15,6 @@ ingredients:
   - Farbstoff (Annatto Norbixin)
 ---
 
-TODO: Hier deine Bewertung schreiben.
+Die Pringles Passport Flavours Italian Style Pesto Flavour schmecken stark nach Basilikum. Leider fehlt für das von mir erwartete Pesto Erlebnis die Käse/Parmesan Note. Zudem geht die Kräuternote etwas in Richtung Säure/Essig. 
+
+Eine leider Enttäuschende Darstellung des weltweit beliebten Pesto Geschmacks die mit Sicherheit besser hätte gelingen können.

@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "tbd"
 name: Mystery Flavour (Fallout 76)
 brand: Pringles
 flavour: Mystery

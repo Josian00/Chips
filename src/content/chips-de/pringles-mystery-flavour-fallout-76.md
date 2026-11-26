@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "Ein mystery Geschmack irgendwo zwischen sour cream und ranch mit Käse"
 flavour: Mystery
 country: USA
 ingredients:
@@ -15,4 +15,6 @@ ingredients:
   - Farbstoff (Annatto Norbixin)
 ---
 
-TODO: Hier deine Bewertung schreiben.
+Die Pringles 76 Mystery Flavor schmecken nach Sour Cream in die Richtung von Ranch mit Zwiebel Knoblauch und einer leichten Käse Note. Es scheint ein leichter nussiger Parmesan Geschmack hindurch.
+
+Die Chips schmecken lecker und gut gewürzt jedoch allgemein eher durchschnittlich.

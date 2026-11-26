@@ -1,5 +1,5 @@
 ---
-title: "TBD"
+title: "Überraschender Gruselspaß"
 flavour: Paprika
 country: Dänemark
 ingredients:
@@ -18,4 +18,6 @@ ingredients:
   - Geräucherte Paprika (0,03 %)
 ---
 
-TODO: Hier deine Bewertung schreiben.
+Die Spooky Snacks taste of paprika schmecken überraschend lecker nach Ketchup mit einem leichten verstecktem rauchigen Aroma. Die Chips haben eine luftige und kompakte Textur und eine glatte Oberfläche.
+
+Eine tolle Beilage zu einer Halloween Party oder für die Halloween Tüte der Kinder. Schon fast schade, dass es sie nicht das ganze Jahr über gibt.
