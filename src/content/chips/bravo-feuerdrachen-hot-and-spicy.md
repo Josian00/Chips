@@ -1,5 +1,5 @@
 ---
-title: "tbd"
+title: "Crunchy, spicy dragons that please everyone"
 name: Feuerdrachen Hot and Spicy
 brand: Bravo
 flavour: Chili
@@ -52,3 +52,6 @@ nutrition:
   salt: 3.2
 ---
 
+The Feuerdrachen delight with a crunchy shell and an airy inside. On top of that comes a pleasant heat from chilli and pepper, with a tasty seasoning of paprika, garlic and onion.
+
+These chips are a pleasant classic for the whole family and go great with a movie and/or game night.

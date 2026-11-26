@@ -1,5 +1,5 @@
 ---
-title: "tbd"
+title: "A mystery flavour somewhere between sour cream and ranch with cheese"
 name: Mystery Flavour (Fallout 76)
 brand: Pringles
 flavour: Mystery
@@ -41,4 +41,6 @@ nutrition:
   salt: 0.6
 ---
 
-TODO: write your review here.
+The Pringles Fallout 76 Mystery Flavour taste of sour cream, heading towards ranch, with onion, garlic and a light cheese note. A slightly nutty Parmesan flavour comes through.
+
+The chips are tasty and well seasoned, but overall rather average.
