@@ -1,1 +1,46 @@
-{}
+{
+  "bravo-feuerdrachen-hot-and-spicy": {
+    "barcode": "21870583",
+    "history": []
+  },
+  "pringles-mystery-flavour-fallout-76": {
+    "barcode": "5053990190034",
+    "history": [
+      {
+        "id": 248097,
+        "date": "2026-03-19",
+        "price": 2.48,
+        "currency": "EUR",
+        "store": "Centre Commercial E.Leclerc",
+        "city": "Clichy",
+        "country": "France"
+      },
+      {
+        "id": 251310,
+        "date": "2026-03-18",
+        "price": 39.9,
+        "currency": "NOK",
+        "store": "Kiwi Bøhmergaten",
+        "city": "Bergen",
+        "country": "Norge"
+      },
+      {
+        "id": 246681,
+        "date": "2026-03-18",
+        "price": 2.49,
+        "currency": "EUR",
+        "store": "Super U",
+        "city": "Paris",
+        "country": "France"
+      }
+    ]
+  },
+  "spooky-snacks-original-taste": {
+    "barcode": "5701397313432",
+    "history": []
+  },
+  "spooky-snacks-taste-of-paprika": {
+    "barcode": "5701397313449",
+    "history": []
+  }
+}
